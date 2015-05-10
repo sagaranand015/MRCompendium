@@ -36,13 +36,16 @@
     <![endif]-->
 
     <!-- for jQuery -->
-    <script src="js/jquery.js"></script>
+    <script src="js/jquery-1.7.1.min.js"></script>
 
     <!-- for my own custom jQuery Scripts -->
     <script src="js/customScripts.js"></script>
 
     <!-- for the social buttons coming from Bootstrap -->
     <link href="css/bootstrap-social.css" rel="stylesheet">    
+
+    <!-- the latest jQuery CDN -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
     <style type="text/css">
 
@@ -72,20 +75,38 @@
         }
 
         #alertMsg {
-            z-index:9999; 
+            z-index:999999; 
             margin: 2% 2% 2% 2%;
             font-family: boldText;
             position: fixed;
         }
 
         #popup {
-            z-index:9999; 
+            z-index:999999; 
             margin: 2% 2% 2% 2%;    
             font-family: boldText;
             position: fixed;
         }
 
     </style>
+
+    <script type="text/javascript">
+
+	    // (function() {
+
+	    // 	console.log(getCookie("userEmail"));
+
+	    // 	if(getCookie("userEmail") != "") {
+	    // 		//alert("cookie is set --> " + getCookie("userEmail"));
+	    // 		window.location.href = "dashboard.php?i=1";
+	    // 	}
+	    // 	else {
+	    // 		console.log("Need to login to Compendium");
+	    // 	}
+
+	    // })();
+
+    </script>
 
 	<script type="text/javascript">
         
@@ -99,6 +120,174 @@
                 popup.fadeOut();
                 return false;
             });
+
+             // for the onBoarding of Signup.
+	        function onBoardSignupManual(FbEmail, FbName) {
+
+	        	console.log("In on boarding function for manual.");
+
+	        	var registerResp = "";
+	        	$('#signupModal').modal('hide');
+
+	        	// firstly, check if the user is already verified or not! In both these cases, the email exists in the Register table.
+				$('#alertMsg').children('p').remove();
+				$('#alertMsg').append("<p>Signing you up. Please wait for a moment.</p>").fadeIn();
+				$.ajax({
+					type: "GET",
+					url: "AJAXFunctions.php",
+					data: {
+						no: "3", name: FbName, email: FbEmail
+					},
+					success: function(response) {
+						response = $.trim(response);
+						registerResp = response;
+					}, 
+					error: function() {
+						$('#alertMsg').children('p').remove();
+						$('#alertMsg').fadeOut();
+						$('#popup').children('p').remove();
+						$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again.</p>").fadeIn();
+					}
+				}).done(function() {
+
+					// now, for checking in the Users table.
+					if(registerResp == "0") {   //user does not exist in the Register table.
+						// here, check if the user exists in the user table. If yes, go to the coupon code page, or else go to the reQuest invite page.
+						$.ajax({
+							type: "GET",
+							url: "AJAXFunctions.php",
+							data: {
+								no: "2", name: FbName, email: FbEmail
+							},
+							success: function(response) {
+								$('#alertMsg').children('p').remove();
+								$('#alertMsg').fadeOut();
+
+								response = $.trim(response);
+
+								if(response == "-1") {   // does not exists in the users table.
+									$('#requestInviteModal').modal('show');
+									$('.requestSalutation').html("<b>Hey " + getCookie("userName") + "! <br /></b>");
+								}
+								else if(response == "1") {   // user exists in the Users table.
+									$('#couponModal').modal('show');
+								}
+								else if(response == "-3") {    // user exists more than once.
+									$('#couponModal').modal('show');	
+								}
+								else {
+									$('#popup').children('p').remove();
+									$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again.</p>").fadeIn();	
+								}
+							},
+							error: function() {
+								$('#alertMsg').children('p').remove();
+								$('#alertMsg').fadeOut();
+								$('#popup').children('p').remove();
+								$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again.</p>").fadeIn();
+							}
+						});
+					}
+					else if(registerResp == "-1") {   // not verified user. In this case, insertion into the Register table wont b done!
+						$('#popup').children('p').remove();
+						$('#popup').append("<p>Looks like this Email address has already signed up. Please enter the coupon code for account activation. </p>").fadeIn();
+						$('#couponModal').modal('show');
+					}
+					else if(registerResp == "1") {   // verified user.
+						// show the user that this email address has already registered.
+						$('#popup').children('p').remove();
+						$('#popup').append("<p>Looks like this Email address has already signed up. Please Login to continue.</p>").fadeIn();
+					}
+					else {
+						$('#popup').children('p').remove();
+						$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again.</p>").fadeIn();
+					}
+
+				});
+
+				// hide all the messages finally.
+				$('#alertMsg').children('p').remove();
+				$('#alertMsg').fadeOut();
+				$('#popup').children('p').remove();
+				$('#popup').fadeOut();
+
+	        }   // end of onBoardSignup()
+
+
+	        // function for logging in.
+	        function onBoardLoginManual(FbEmail, FbName) {
+
+	        	// set the cookies here.
+				setCookie("userEmail", FbEmail, 150);
+				setCookie("userName", FbName, 150);
+
+	    		 // now, for logging into the Compendium.
+	            $('#alertMsg').children('p').remove();
+	            $('#alertMsg').append("<p>Please give us a moment while we log you in...</p>").fadeIn();
+	            $.ajax({
+	            	type: "GET",
+	            	url: "AJAXFunctions.php",
+	            	data: {
+	            		no: "4", name: FbName, email: FbEmail
+	            	},
+	            	success: function(response) {
+	            		$('#alertMsg').children('p').remove();
+						$('#alertMsg').fadeOut();
+	            		response = $.trim(response);
+	            		if(response == "0") {   // user does not exist in the Register table.
+	            			$('#popup').children('p').remove();
+	            			$('#popup').append("<p>The Email Address used for login is not signed up yet. Please Signup first.</p>").fadeIn();
+	            		}
+	            		else if(response == "-1") {   // not verified user.
+	            			//alert("Go to the coupons page for verification.");
+	            			$('#couponModal').modal('show');
+	            		}
+	            		else if(response == "1") {   // verified user.
+	            			//alert("Go to the dashboard page.");
+
+
+	            			//authenticate the user here from the register table.
+	            			$.ajax({
+	            				type: "GET",
+	            				url: "AJAXFunctions.php",
+	            				data: {
+	            					no: "7", email: FbEmail, pwd: $('#txtLoginPwd').val()
+	            				},
+	            				success: function(response) {
+
+	            					response = $.trim(response);
+
+	            					if(response == "1") {
+	            						window.location.href = "dashboard.php";
+	            					}
+	            					else if(response == "0") {
+	            						$('#popup').children('p').remove();
+				            			$('#popup').append("<p>Oops! We could not authenticate your request. Please re-check your password and try again.").fadeIn();                				            						
+	            					}
+	            					else {
+	            						$('#popup').children('p').remove();
+				            			$('#popup').append("<p>Oops! We encountered an error while authenticating your request. Please try again.").fadeIn();                				            						
+	            					}
+	            				},
+	            				error: function() {
+									$('#popup').children('p').remove();
+			            			$('#popup').append("<p>Oops! We encountered an error while authenticating your request. Please try again.").fadeIn();                				            					
+	            				}
+	            			});
+	            		}
+	            		else {
+							$('#popup').children('p').remove();
+	            			$('#popup').append("<p>Oops! We encountered an error while processing your request. Please try again.").fadeIn();                			
+	            		}
+	            	},
+	            	error: function() {
+	            		$('#alertMsg').children('p').remove();
+						$('#alertMsg').fadeOut();
+						$('#popup').children('p').remove();
+	        			$('#popup').append("<p>Oops! We encountered an error while processing your request. Please try again.").fadeIn();                			
+	            	}
+	            });
+	        }
 
             // for the send message button on the home page in contact us tab.
             $('#btnSendMessage').on('click', function() {
@@ -150,9 +339,740 @@
                 return false;
             });
 
+			// for the manual sign up button.
+			$('#btnSignupManual').on('click', function() {
+
+				var name = $('#txtSignupName').val();
+				var email = $('#txtSignupEmail').val();
+				var pwd = $('#txtSignupPwd').val();
+
+				// set the cookies here.
+				setCookie("userEmail", email, 150);
+				setCookie("userName", name, 150);
+
+				if(name == "" || email == "" || pwd == "") {
+					popup.children('p').remove();
+					popup.append("<p>Looks like you missed some input values. Please verify and try again.</p>").fadeIn();
+				}
+				else if(!isValidEmailAddress(email)) {
+					popup.children('p').remove();
+					popup.append("<p>The Email Address entered does not appears to be correct. Please verify and try again.</p>").fadeIn();
+				}
+				else {
+					// for manual onboarding thing
+					onBoardSignupManual(email, name);
+				}
+				return false;
+			});
+
+			// for the manual Log in button
+			$('#btnLoginManual').on('click', function() {
+
+				var email = $('#txtLoginEmail').val();
+				var pwd = $('#txtLoginPwd').val();
+
+				// set the cookies here.
+				setCookie("userEmail", email, 150);
+				setCookie("userName", name, 150);
+
+				// for the onBoardLogin call
+				onBoardLoginManual(email, "");
+
+				return false;
+
+			});
+
+			// for the coupon code acceptance
+			$('#btnCouponCode').on('click', function() {
+
+				var code = $('#txtCouponCode').val();
+				code = code.trim();
+
+				var codeResp = "";
+
+				if(code == "") {
+					popup.children('p').remove();
+					popup.append("<p>Please enter the coupon code for us to activate your Compendium.</p>").fadeIn();
+				} 
+				else {
+
+					// do all the compendium stuff here.
+					// here, firstly check if the coupon code is correct. If yes, (add or update) the Entry in Register table. Otherwise, enter again.
+					$('#alertMsg').children('p').remove();
+					$('#alertMsg').append("<p>Please wait while we check your Coupon code. Signing you in a minute...</p>").fadeIn();
+					$.ajax({
+						type: "GET",
+						url: "AJAXFunctions.php",
+						data: {
+							no: "5", code: code
+						},
+						success: function(response) {
+							response = $.trim(response);
+
+							if(response == "1") {   // valid coupon exists.
+								codeResp = response;
+							}
+							else if(response == "2") {   // coupon does not exists.
+								popup.children('p').remove();
+								popup.append("<p>Oops! The coupon code you entered did not match to anything we have. Please try again.</p>").fadeIn();
+							}
+							else if(response == "3") {   // coupon is invalid.
+								popup.children('p').remove();
+								popup.append("<p>Oops! The coupon code you entered has expired. Please try again or request another invite.</p>").fadeIn();	
+							}
+							else {   // error condition.
+								popup.children('p').remove();
+								popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
+							}
+						},
+						error: function() {
+							popup.children('p').remove();
+							popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
+						}
+					}).done(function() {
+
+						var pwd = $('#txtSignupPwd').val();
+
+						// now, insert or update the Register table for the new verified user.
+						$.ajax({
+							type: "POST",
+							url: "AJAXFunctions.php",
+							data: {
+								no: "6", signemail: getCookie("userEmail"), signname: getCookie("userName"), signpwd: pwd
+							},
+							success: function(response) {
+								response = $.trim(response);
+
+								if(response == "1") {   // everything successful. inserted and verified.
+									// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+									window.location.href = "dashboard.php";
+								}
+								else if(response == "2") {   // cannot be verified.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+								}
+								else if(response == "3") {   // cannot be inserted.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+								else {
+									popup.children('p').remove();
+									popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+							},
+							error: function(res) {
+
+								console.log(res);
+
+								var response = res.responseText;
+
+								if(response == "1") {   // everything successful. inserted and verified.
+									// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+									window.location.href = "dashboard.php";
+								}
+								else if(response == "2") {   // cannot be verified.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+								}
+								else if(response == "3") {   // cannot be inserted.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+								else {
+									popup.children('p').remove();
+									popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+
+								// popup.children('p').remove();
+								// popup.append("<p>1. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+							}
+						});
+
+						$('#alertMsg').children('p').remove();
+						$('#alertMsg').fadeOut();
+
+					});
+
+				}    // end of else.
+				return false;
+			});
+
+			// for the request invite button
+			$('#btnRequestInvite').on('click', function() {
+
+				popup.children('p').remove();
+				popup.append("<p>Your Invite has been registered. Please check your mailbox for further details</p>").fadeIn();
+
+				return false;
+
+			});
+
         });
 
 	</script>
+
+    <!--  this is the script for Javascript SDK for logging into QR using Facebook login!! -->
+    <script type="text/javascript">
+
+    	var alertMsg = $('#alertMsg').fadeOut();
+        var popup = $('#popup').fadeOut();    
+
+        $('#btnExitPopup').on('click', function() {
+            popup.children('p').remove();
+            popup.fadeOut();
+            return false;
+        });
+
+        // for the onBoarding of Signup, using Facebook
+        function onBoardSignupFacebook(FbEmail, FbName) {
+
+        	console.log("In on boarding function for facebook.");
+
+        	// set the cookies here.
+			setCookie("userEmail", FbEmail, 150);
+			setCookie("userName", FbName, 150);
+
+        	var registerResp = "";
+        	$('#signupModal').modal('hide');
+
+        	// firstly, check if the user is already verified or not! In both these cases, the email exists in the Register table.
+			$('#alertMsg').children('p').remove();
+			$('#alertMsg').append("<p>Signing you up. Please wait for a moment.</p>").fadeIn();
+			$.ajax({
+				type: "GET",
+				url: "AJAXFunctions.php",
+				data: {
+					no: "3", name: FbName, email: FbEmail
+				},
+				success: function(response) {
+					response = $.trim(response);
+					registerResp = response;
+				}, 
+				error: function() {
+					$('#alertMsg').children('p').remove();
+					$('#alertMsg').fadeOut();
+					$('#popup').children('p').remove();
+					$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again. [Error in AJAX.]</p>").fadeIn();
+				}
+			}).done(function() {
+
+				// now, for checking in the Users table.
+				if(registerResp == "0") {
+					// here, check if the user exists in the user table. If yes, go to the coupon code page, or else go to the reQuest invite page.
+					$.ajax({
+						type: "GET",
+						url: "AJAXFunctions.php",
+						data: {
+							no: "2", name: FbName, email: FbEmail
+						},
+						success: function(response) {
+							$('#alertMsg').children('p').remove();
+							$('#alertMsg').fadeOut();
+
+							response = $.trim(response);
+
+							if(response == "-1") {   // does not exists in the users table.
+								//alert("Go to the Request Invite page.");
+								$('#requestInviteModal').modal('show');
+								$('.requestSalutation').html("<b>Hey " + getCookie("userName") + "! <br /></b>");
+							}
+							else if(response == "1") {   // user exists in the Users table.
+								//alert("Go to the Coupon Code page.");
+								$('#couponModal').modal('show');
+							}
+							else if(response == "-3") {
+								//alert("User Email exists more than once. ");
+								$('#popup').children('p').remove();
+								$('#popup').append("<p>Looks like this Email address has already signed up. Please enter the coupon code for account activation. </p>").fadeIn();
+								$('#couponModal').modal('show');
+							}
+							else {
+								$('#popup').children('p').remove();
+								$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again. Error here.</p>").fadeIn();	
+							}
+						},
+						error: function() {
+							$('#alertMsg').children('p').remove();
+							$('#alertMsg').fadeOut();
+							$('#popup').children('p').remove();
+							$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again. [Error in 2nd AJAX.]</p>").fadeIn();
+						}
+					});
+				}
+				else if(registerResp == "-1") {   // not verified user.
+					//alert("Go to the coupons page.");
+					$('#couponModal').modal('show');
+				}
+				else if(registerResp == "1") {   // verified user. Already signed up.
+					$('#popup').children('p').remove();
+					$('#popup').append("<p>Looks like this Email address has already signed up and activated. Please Login to continue.</p>").fadeIn();
+				}
+				else {
+					$('#popup').children('p').remove();
+					$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again. Error in registerResp.</p>").fadeIn();
+				}
+
+			});
+        }   // end of onBoardSignup()
+
+        // function for logging in.
+        function onBoardLoginFacebook(FbEmail, FbName) {
+
+        	// set the cookies here.
+			setCookie("userEmail", FbEmail, 150);
+			setCookie("userName", FbName, 150);
+
+    		 // now, for logging into the Compendium.
+            $('#alertMsg').children('p').remove();
+            $('#alertMsg').append("<p>Please give us a moment while we log you in...</p>").fadeIn();
+            $.ajax({
+            	type: "GET",
+            	url: "AJAXFunctions.php",
+            	data: {
+            		no: "4", name: FbName, email: FbEmail
+            	},
+            	success: function(response) {
+            		$('#alertMsg').children('p').remove();
+					$('#alertMsg').fadeOut();
+            		response = $.trim(response);
+            		if(response == "0") {   // user does not exist in the Register table.
+            			$('#popup').children('p').remove();
+            			$('#popup').append("<p>The Email Address used for login is not signed up yet. Please Signup first.</p>").fadeIn();
+            		}
+            		else if(response == "-1") {   // not verified user.
+            			//alert("Go to the coupons page for verification.");
+            			$('#couponModal').modal('show');
+            		}
+            		else if(response == "1") {   // verified user.
+            			//alert("Go to the dashboard page.");
+            			window.location.href = "dashboard.php";
+            		}
+            		else {
+						$('#popup').children('p').remove();
+            			$('#popup').append("<p>Oops! We encountered an error while processing your request. Please try again.").fadeIn();                			
+            		}
+            	},
+            	error: function() {
+            		$('#alertMsg').children('p').remove();
+					$('#alertMsg').fadeOut();
+					$('#popup').children('p').remove();
+        			$('#popup').append("<p>Oops! We encountered an error while processing your request. Please try again.").fadeIn();                			
+            	}
+            });
+        }
+
+        // for clicking on the facebook login button.
+        $('#btnFbLogin').on('click', function() {
+        	console.log("Logging in using Facebook.");
+        	checkLoginState();
+        });
+
+        // callback thing for logging into Compendium using Facebook.
+        function statusChangeCallback(response) {
+            if (response.status === 'connected') {
+            	console.log("Connected while logging in.");
+          		testAPI();
+            }
+            else if (response.status === 'not_authorized') {   // The person is logged into Facebook, but not your app.
+              //alert("Please login into the  MR-QR app.");
+              console.log(" not_authorized.");
+              popup.children('p').remove();
+              popup.append("<p>Please login into the MR - Compendium app to continue.</p>").fadeIn('fast');
+            } 
+            else {
+                //alert("Please login into facebook and the app too!!");
+                console.log("Not logged into fb.");
+                popup.children('p').remove();
+              	popup.append("<p>Please login into your facebook account to continue.</p>").fadeIn('fast');
+            }
+    	}
+
+    	// callback function for Signup thing.
+    	function statusChangeCallbackSignup(response) {
+    		console.log("In statusChangeCallbackSignup()");
+            if (response.status === 'connected') {
+            	console.log("Connected.");
+          		testAPISignup();
+            }
+            else if (response.status === 'not_authorized') {   // The person is logged into Facebook, but not your app.
+              //alert("Please login into the  MR-QR app.");
+              console.log(" not_authorized.");
+              popup.children('p').remove();
+              popup.append("<p>Please login into the MR - Compendium app to continue.</p>").fadeIn('fast');
+            } 
+            else {
+                //alert("Please login into facebook and the app too!!");
+                console.log("Not logged into fb.");
+            	popup.children('p').remove();
+              	popup.append("<p>Please login into your facebook account to continue.</p>").fadeIn('fast');
+            }
+    	}
+
+    	// This function is called when someone finishes with the Login
+        // Button.  See the onlogin handler attached to it in the sample
+        // code below.
+        function checkLoginState() { 
+        	console.log("I m logging in for MR - Compendium");
+            FB.getLoginStatus(function(response) {    
+          		statusChangeCallback(response);
+            });
+        } 
+
+        // for the sign up thing.
+        function checkSignupState() { 
+        	console.log("I m signing up for MR - Compendium");
+            FB.getLoginStatus(function(response) {    
+          		statusChangeCallbackSignup(response);
+            });
+        } 
+
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '802885419774376',
+                cookie     : true,  // enable cookies to allow the server to access 
+                                    // the session
+                xfbml      : true,  // parse social plugins on this page
+                version    : 'v2.1' // use version 2.1
+            });
+
+            /*FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });  */
+        };
+
+        // Load the SDK asynchronously
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        //this is the function that runs after the signup is successful.
+        function testAPI() {
+
+            FB.api('/me', function(response) {
+                //alert("Login success: " + response.name + " --> " + response.email + " --> " + response.id  + " --> " + response.birthday + " --> " + response.gender + " --> " + response.link  + " --> " + response.location);
+                //alert(response.email + " --> " + response.name);
+
+                var FbEmail = response.email;
+                var FbName = response.name;
+                //alert("Logging in: " + FbEmail + " --> " + FbName);
+
+                // call to the log in function
+                onBoardLoginFacebook(FbEmail, FbName);
+               
+            });
+        }   //this is the end of the testAPI function  for login.
+
+        //this is the function that runs after the signup is successful.
+        function testAPISignup() {
+        	console.log("In testAPISignup()");
+            FB.api('/me', function(response) {
+				//alert("Login success: " + response.name + " --> " + response.email + " --> " + response.id  + " --> " + response.birthday + " --> " + response.gender + " --> " + response.link  + " --> " + response.location);
+				//alert(response.email + " --> " + response.name);
+
+				var FbEmail = response.email;
+				var FbName = response.name;
+
+				//alert("Signing up: " + FbEmail + " --> " + FbName);
+               
+				// for the on-boarding process of sign up thing!
+				onBoardSignupFacebook(FbEmail, FbName);
+
+            });
+
+        }   //this is the end of the testAPI function  for Signup
+
+    </script>
+
+    <!-- this is for the google signin thing -->
+    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
+
+    <meta name="google-signin-clientid" content="947100308668-htrbcelkmc6aequlcfcpb8bhlja8bur2.apps.googleusercontent.com" />
+    <meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.login" />
+    <meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.profile.emails.read">
+    <meta name="google-signin-requestvisibleactions" content="http://schema.org/AddAction" />
+    <meta name="google-signin-cookiepolicy" content="single_host_origin" />
+    <script src="https://apis.google.com/js/client:platform.js?onload=render" async defer></script>
+
+    <script type="text/javascript">
+
+        //for the alert boxes
+        var alertMsg = $('#alertMsg').hide();
+        //for the popup!
+        var popup = $('#popup').hide(1);
+        //button to hide the popup appearing!
+        $('#btnExitPopup').on('click', function () {
+            popup.fadeOut();
+            return false;
+        });
+
+        // for the onBoarding of Signup. [in Google]
+        function onBoardSignupGoogle(FbEmail, FbName) {
+
+        	console.log("In on boarding function for Google.");
+
+        	// set the cookies here.
+			setCookie("userEmail", FbEmail, 150);
+			setCookie("userName", FbName, 150);
+
+        	var registerResp = "";
+        	$('#signupModal').modal('hide');
+
+        	// firstly, check if the user is already verified or not! In both these cases, the email exists in the Register table.
+			$('#alertMsg').children('p').remove();
+			$('#alertMsg').append("<p>Signing you up. Please wait for a moment.</p>").fadeIn();
+			$.ajax({
+				type: "GET",
+				url: "AJAXFunctions.php",
+				data: {
+					no: "3", name: FbName, email: FbEmail
+				},
+				success: function(response) {
+					response = $.trim(response);
+					registerResp = response;
+				}, 
+				error: function() {
+					$('#alertMsg').children('p').remove();
+					$('#alertMsg').fadeOut();
+					$('#popup').children('p').remove();
+					$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again.</p>").fadeIn();
+				}
+			}).done(function() {
+
+				// now, for checking in the Users table.
+				if(registerResp == "0") {
+					// here, check if the user exists in the user table. If yes, go to the coupon code page, or else go to the reQuest invite page.
+					$.ajax({
+						type: "GET",
+						url: "AJAXFunctions.php",
+						data: {
+							no: "2", name: FbName, email: FbEmail
+						},
+						success: function(response) {
+							$('#alertMsg').children('p').remove();
+							$('#alertMsg').fadeOut();
+
+							response = $.trim(response);
+
+							if(response == "-1") {   // does not exists in the users table.
+								//alert("Go to the Request Invite page.");
+								$('#requestInviteModal').modal('show');
+								$('.requestSalutation').html("<b>Hey " + getCookie("userName") + "! <br /></b>");
+							}
+							else if(response == "1") {   // user exists in the Users table.
+								//alert("Go to the Coupon Code page.");
+								$('#couponModal').modal('show');
+							}
+							else if(response == "-3") {
+								//alert("User Email exists more than once. ");
+								$('#couponModal').modal('show');
+							}
+							else {
+								$('#popup').children('p').remove();
+								$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again.</p>").fadeIn();	
+							}
+						},
+						error: function() {
+							$('#alertMsg').children('p').remove();
+							$('#alertMsg').fadeOut();
+							$('#popup').children('p').remove();
+							$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again.</p>").fadeIn();
+						}
+					});
+				}
+				else if(registerResp == "-1") {   // not verified user.
+					//alert("Go to the coupons page.");
+					$('#popup').children('p').remove();
+					$('#popup').append("<p>Looks like this Email address has already signed up. Please enter the coupon code for account activation. </p>").fadeIn();
+					$('#couponModal').modal('show');
+				}
+				else if(registerResp == "1") {   // verified user.
+					$('#popup').children('p').remove();
+					$('#popup').append("<p>Looks like this Email address has already signed up and activated. Please Login to continue.</p>").fadeIn();
+				}
+				else {
+					$('#popup').children('p').remove();
+					$('#popup').append("<p>Oops! We encountered an error signing you up. Please try again.</p>").fadeIn();
+				}
+
+			});
+        }   // end of onBoardSignup()
+
+        // function for logging in.
+        function onBoardLoginGoogle(FbEmail, FbName) {
+
+        	// set the cookies here.
+			setCookie("userEmail", FbEmail, 150);
+			setCookie("userName", FbName, 150);
+
+    		 // now, for logging into the Compendium.
+            $('#alertMsg').children('p').remove();
+            $('#alertMsg').append("<p>Please give us a moment while we log you in...</p>").fadeIn();
+            $.ajax({
+            	type: "GET",
+            	url: "AJAXFunctions.php",
+            	data: {
+            		no: "4", name: FbName, email: FbEmail
+            	},
+            	success: function(response) {
+            		$('#alertMsg').children('p').remove();
+					$('#alertMsg').fadeOut();
+            		response = $.trim(response);
+            		if(response == "0") {   // user does not exist in the Register table.
+            			$('#popup').children('p').remove();
+            			$('#popup').append("<p>The Email Address used for login is not signed up yet. Please Signup first.</p>").fadeIn();
+            		}
+            		else if(response == "-1") {   // not verified user.
+            			//alert("Go to the coupons page for verification.");
+            			$('#couponModal').modal('show');
+            		}
+            		else if(response == "1") {   // verified user.
+            			//alert("Go to the dashboard page.");
+            			window.location.href = "dashboard.php";
+            		}
+            		else {
+						$('#popup').children('p').remove();
+            			$('#popup').append("<p>Oops! We encountered an error while processing your request. Please try again.").fadeIn();                			
+            		}
+            	},
+            	error: function() {
+            		$('#alertMsg').children('p').remove();
+					$('#alertMsg').fadeOut();
+					$('#popup').children('p').remove();
+        			$('#popup').append("<p>Oops! We encountered an error while processing your request. Please try again.").fadeIn();                			
+            	}
+            });
+        }   // end of OnBoardLogin()
+
+        function render() {
+            // Additional params including the callback, the rest of the params will
+            // come from the page-level configuration.
+            var additionalParams = {
+                'callback': signinCallback
+            };
+
+            // the sign up additional parameters.
+            var additionalParamsSignup = {
+            	'callback': signupCallback
+            };
+
+            // for the login button.
+            $('#btnGoogleLogin').on('click', function() {
+                gapi.auth.signIn(additionalParams);   // Will use page level configuration
+            });
+
+            // for the sign up button.
+            $('#btnGoogleSignup').on('click', function() {
+                gapi.auth.signIn(additionalParamsSignup);   // Will use page level configuration
+            });
+        }
+
+        // for the google sign in
+        function signinCallback(authResult) {
+
+            if (authResult['status']['signed_in']) {
+                var primaryEmail = ""; 
+                var name = "";
+                gapi.client.load('plus', 'v1', function() {
+                    // Request1: obtain logged-in member info
+                    var request = gapi.client.plus.people.get({
+                        'userId': 'me'
+                    });
+
+                    //'actor': {'image': {'url': aInfo.image.url}, 'url': aInfo.url, 'displayName': aInfo.displayName},
+                    request.execute(function(aInfo) {
+                        // prepare author info array for rendering
+                        var authorInfo = [
+                            {
+                                'id': aInfo.id,
+                                'published': '',
+                                'url': aInfo.url,
+                                'title': 'My page at G+',
+                                'object': {'content': ''}
+                            }
+                        ];
+
+                        for (var i=0; i < aInfo.emails.length; i++) {
+                            if (aInfo.emails[i].type === 'account') 
+                                primaryEmail = aInfo.emails[i].value;
+                            }
+                        name = aInfo.displayName;    
+
+                        //for the onBoardLogin Call.
+                        onBoardLoginGoogle(primaryEmail, name);
+
+                    });  
+                });     //end of the load() function
+            }    //end of the if condition!!
+            else {
+                // Update the app to reflect a signed out user
+                // Possible error values:
+                //   "user_signed_out" - User is signed-out
+                //   "access_denied" - User denied access to your app
+                //   "immediate_failed" - Could not automatically log in the user
+                if(authResult['error'] === 'access_denied') {
+                    $('#popup').children('p').remove();
+                    $('#popup').append("<p>Access to the app denied. Please try again.</p>").fadeIn('fast');
+                }
+                console.log('Sign-in state: ' + authResult['error']);
+            }
+        }   //end of the signinCallback function!! [Google]
+
+        // for the google sign up
+        function signupCallback(authResult) {
+
+            if (authResult['status']['signed_in']) {
+                var primaryEmail = ""; 
+                var name = "";
+
+                gapi.client.load('plus', 'v1', function() {
+                    // Request1: obtain logged-in member info
+                    var request = gapi.client.plus.people.get({
+                        'userId': 'me'
+                    });
+
+                    //'actor': {'image': {'url': aInfo.image.url}, 'url': aInfo.url, 'displayName': aInfo.displayName},
+                    request.execute(function(aInfo) {
+                        // prepare author info array for rendering
+                        var authorInfo = [
+                            {
+                                'id': aInfo.id,
+                                'published': '',
+                                'url': aInfo.url,
+                                'title': 'My page at G+',
+                                'object': {'content': ''}
+                            }
+                        ];
+
+                        for (var i=0; i < aInfo.emails.length; i++) {
+                            if (aInfo.emails[i].type === 'account') 
+                                primaryEmail = aInfo.emails[i].value;
+                            }
+                        name = aInfo.displayName;    
+
+                        onBoardSignupGoogle(primaryEmail, name);
+
+                    });  
+                });     //end of the load() function
+            }    //end of the if condition!!
+            else {
+                // Update the app to reflect a signed out user
+                // Possible error values:
+                //   "user_signed_out" - User is signed-out
+                //   "access_denied" - User denied access to your app
+                //   "immediate_failed" - Could not automatically log in the user
+                if(authResult['error'] === 'access_denied') {
+                    $('#popup').children('p').remove();
+                    $('#popup').append("<p>Access to the app denied. Please try again.</p>").fadeIn('fast');
+                }
+                console.log('Sign-in state: ' + authResult['error']);
+            }
+        }   //end of the signupCallback function!! [Google]
+
+    </script>
 
 </head>
 
@@ -195,7 +1115,10 @@
                         <a class="page-scroll" href="#contact">Contact</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#" id="login" data-toggle="modal" data-target="#loginModal">Login</a>
+                        <a href="#" id="login" data-toggle="modal" data-target="#loginModal">Login</a>
+                    </li>
+                    <li>
+                        <a href="#" id="signup" data-toggle="modal" data-target="#signupModal">Sign up</a>
                     </li>
                 </ul>
             </div>
@@ -326,34 +1249,6 @@
         </div>
     </section>
 
-    <!-- Clients Aside -->
-    <!-- <aside class="clients">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-sm-6">
-                    <a href="#">
-                        <img src="img/logos/envato.jpg" class="img-responsive img-centered" alt="">
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#">
-                        <img src="img/logos/designmodo.jpg" class="img-responsive img-centered" alt="">
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#">
-                        <img src="img/logos/themeforest.jpg" class="img-responsive img-centered" alt="">
-                    </a>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <a href="#">
-                        <img src="img/logos/creative-market.jpg" class="img-responsive img-centered" alt="">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </aside> -->
-
     <section id="contact">
         <div class="container">
             <div class="row">
@@ -428,15 +1323,15 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Log in to The Compendium</h4>
+                    <h4 class="modal-title" id="myModalLabel">Log in to MR - Compendium</h4>
                 </div>
                 <div class="modal-body col-lg-6 col-md-6" id="socialLogin"> 
 
                     <h3>
-                        Social Media Signup
+                        Social Media Login
                     </h3>
 
-                    <button id="btnFbLogin" class="btn btn-lg btn-block btn-social btn-facebook" style="margin: 8% 0% 2% 0%;">
+                    <button id="btnFbLogin" class="btn btn-lg btn-block btn-social btn-facebook" style="margin: 8% 0% 2% 0%;" onclick="checkLoginState();">
                         <i class="fa fa-facebook"></i>
                         Facebook Login
                     </button> 
@@ -451,23 +1346,23 @@
                 <div class="modal-body col-lg-6 col-md-6" id="manualLogin">
 
                     <h3>
-                        Sign up here                        
+                        Login here                        
                     </h3>
 
                     <table class="table">
                         <tr>
                             <td>
-                                <input type="email" id="txtLoginEmail" placeholder="Email Address" class="form-control" />
+                                <input type="email" id="txtLoginEmail" placeholder="Email Address *" class="form-control" />
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <input type="password" id="txtLoginPwd" placeholder="Password" class="form-control" />
+                                <input type="password" id="txtLoginPwd" placeholder="Password *" class="form-control" />
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <button class="btn btn-lg btn-block btn-primary" id="btnLoginManual">Sign up</button>
+                                <button class="btn btn-lg btn-block btn-primary" id="btnLoginManual">Login to Compendium</button>
                             </td>
                         </tr>
                     </table>
@@ -476,12 +1371,173 @@
 
                 <div class="modal-footer">
 
-                <div style="float:left;">
-                    <a href="#" class="quicklinks">Privacy Policy &nbsp;&nbsp;&nbsp;&nbsp;</a>
-                    <a href="#" class="quicklinks">Terms of Use</a>
-                </div>
+                    <div style="float:left;">
+                        <a href="#" class="quicklinks">Privacy Policy &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                        <a href="#" class="quicklinks">Terms of Use</a>
+                    </div>
                     
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- for the login modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Sign up for MR - Compendium</h4>
+                </div>
+                <div class="modal-body col-lg-6 col-md-6" id="socialLogin"> 
+
+                    <h3>
+                        Social Media Signup
+                    </h3>
+
+                    <button id="btnFbSignup" class="btn btn-lg btn-block btn-social btn-facebook" style="margin: 8% 0% 2% 0%;" onclick="checkSignupState();">
+                        <i class="fa fa-facebook"></i>
+                        Facebook Signup
+                    </button> 
+
+                    <button id="btnGoogleSignup" class="btn btn-lg btn-block btn-social btn-google" style="margin: 3% 0% 2% 0%;">
+                        <i class="fa fa-google"></i>
+                        Google Signup
+                    </button>    
+
+                </div>
+
+                <div class="modal-body col-lg-6 col-md-6" id="manualSignup">
+
+                    <h3>
+                        Sign up here                        
+                    </h3>
+
+                    <table class="table">
+                    	<tr>
+                            <td>
+                                <input type="text" id="txtSignupName" placeholder="Your Name *" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="email" id="txtSignupEmail" placeholder="Email Address *" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="password" id="txtSignupPwd" placeholder="Password *" class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn btn-lg btn-block btn-primary" id="btnSignupManual">Sign up</button>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <div style="float:left;">
+                        <a href="#" class="quicklinks">Privacy Policy &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                        <a href="#" class="quicklinks">Terms of Use</a>
+                    </div>
+                    
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- for the coupons modal -->
+    <div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Activate your Compendium</h4>
+                </div>
+                <div class="modal-body" id="socialLogin"> 
+
+                	<br /><br />
+
+	                <table class="table">
+                		<tr>
+                			<td>
+                				<input type="text" id="txtCouponCode" class="form-control" placeholder="Enter Coupon code *" />
+                			</td>
+                		</tr>
+                		<tr>
+                			<td>
+                				<button class="btn btn-lg btn-block btn-primary" id="btnCouponCode">
+                					Activate
+                				</button>
+                			</td>
+                		</tr>
+	                </table>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <div style="float:left;">
+                        <a href="#" class="quicklinks">Privacy Policy &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                        <a href="#" class="quicklinks">Terms of Use</a>
+                    </div>
+                    
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- for the coupons modal -->
+    <div class="modal fade" id="requestInviteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Request Invite for Compendium</h4>
+                </div>
+                <div class="modal-body" id="socialLogin"> 
+
+                	<br /><br />
+
+	                <table class="table">
+                		<tr>
+                			<td>
+                				<p style="text-align: justify;">
+                					<span class="requestSalutation"></span> It appears to us that this email address of yours has not been invited to access Compendium yet. Please request an invite for trying this free service.
+                				</p>
+                				<p style="text-align: justify;">
+                					In case of any other problems, please feel free to drop in a mail at <code>tech@mentored-research.com</code> and we'd get back to you in 48 hours. 
+                				</p>
+                				<p style="text-align: justify;">
+                					Thank You.
+                				</p>
+                			</td>
+                		</tr>
+                		<tr>
+                			<td>
+                				<button class="btn btn-lg btn-block btn-primary" id="btnRequestInvite">
+                					Request Invite
+                				</button>
+                			</td>
+                		</tr>
+	                </table>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <div style="float:left;">
+                        <a href="#" class="quicklinks">Privacy Policy &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                        <a href="#" class="quicklinks">Terms of Use</a>
+                    </div>
+                    
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
