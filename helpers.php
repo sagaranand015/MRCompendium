@@ -5,6 +5,29 @@
 //these are for the PHP Helper files
 include 'headers/databaseConn.php';
 
+//this is the function to send the mail to the user who requested the connection, as a confirmation.
+function SendRequestInviteMail($from, $to, $subject, $body) {
+	$res = "-1";
+	try{
+
+		$Header = 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+		$Header .= 'From: MR - Compendium (Mentored-Research)<guide@mentored-research.com>' . "\r\n";
+		$message = $body;
+
+		if(mail($to,$subject,$message,$Header) == true) {
+			$res = "1";
+		}
+		else {
+			$res = "-1";	
+		}
+		return $res;
+	}	
+	catch(Exception $e) {
+		$res = "-1";
+		return $res;
+	}
+}
+
 // this is the function to authenticate the user from Register table.
 function AuthenticateUserRegister($email, $pwd) {
 	$resp = "-1";

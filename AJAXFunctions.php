@@ -27,6 +27,47 @@ else if(isset($_POST["no"]) && $_POST["no"] == "6") {   // to insert/update the 
 else if(isset($_GET["no"]) && $_GET["no"] == "7") {   // for authentication of password from the Resgiter table during login.
 	AuthenticateUser($_GET["email"], $_GET["pwd"]);
 }
+else if(isset($_GET["no"]) && $_GET["no"] == "8") {   // for adding the user to Users table for invite requests.
+	AddToInvites($_GET["email"], $_GET["name"], "1");    // 1 is for indicating that the user has requested the invite himself.
+}
+
+// this is the function to add the user to Users table for requesting invites.
+// returns 1 on all success. 2 on insert success and mail failure. -1 on Error and all failures.
+function AddToInvites($email, $name, $isRequest) {
+	$response = "-1";
+	$date = date("Y-m-d H:i:s");
+	$mailBody = "";
+	$subject = "MR - Compendium Invitation Received";
+	try {
+		$query = "insert into Users(Name, Email, IsRequest, UpdatedOn) values('$name', '$email', '$isRequest', '$date')";
+		$rs = mysql_query($query);
+		if(!$rs) {
+			$response = "-1";
+		}
+		else {
+			// write the mail body here.
+			$mailBody .= "<h1>MR - Compendium Invitation</h1><br />";
+			$mailBody .= "Dear " . $name . "<br />";
+			$mailBody .= "Your Invite Code for MR - Compendium Access is: <b>testCoupon</b>. Please go ahead and use this code on <code>http://mentored-research.com/Compendium</code> to activate your Compendium Account.<br />";
+
+			$mailBody .= "<br /><br />Thank You.";
+			$mailBody .= "<br />MR - Compendium";
+			$mailBody .= "<br /><a href='http://mentored-research.com'>Mentored-Research</a>";
+
+			if(SendRequestInviteMail("guide@mentored-research.com", $email, $subject, $mailBody) == "1") {
+				$response = "1";
+			}
+			else {
+				$response = "2";
+			}
+		}
+		echo $response;
+	}
+	catch(Exception $e) {
+		$response = "-1";
+		echo $response;
+	}
+}
 
 // this is the function to authenticate the user from the Register table.
 function AuthenticateUser($email, $pwd) {
