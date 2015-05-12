@@ -99,15 +99,7 @@
 
 	    // (function() {
 
-	    // 	console.log(getCookie("userEmail"));
 
-	    // 	if(getCookie("userEmail") != "") {
-	    // 		//alert("cookie is set --> " + getCookie("userEmail"));
-	    // 		window.location.href = "dashboard.php?i=1";
-	    // 	}
-	    // 	else {
-	    // 		console.log("Need to login to Compendium");
-	    // 	}
 
 	    // })();
 
@@ -125,6 +117,19 @@
                 popup.fadeOut();
                 return false;
             });
+
+            // for checking the query string and all.
+	    	var qs = getQueryStrings();
+
+	    	console.log("I m here and working!!");
+	    	console.log(qs["login"]);
+
+	    	if(qs["login"] == "1") {   // show the login modal.
+	    		$('#loginModal').modal('show');
+	    	}
+	    	else {   // do nothing here.
+
+	    	}
 
              // for the onBoarding of Signup.
 	        function onBoardSignupManual(FbEmail, FbName) {
@@ -416,6 +421,65 @@
 
 							if(response == "1") {   // valid coupon exists.
 								codeResp = response;
+
+								var pwd = $('#txtSignupPwd').val();
+
+								// now, insert or update the Register table for the new verified user.
+								$.ajax({
+									type: "POST",
+									url: "AJAXFunctions.php",
+									data: {
+										no: "6", signemail: getCookie("userEmail"), signname: getCookie("userName"), signpwd: pwd
+									},
+									success: function(response) {
+										response = $.trim(response);
+
+										if(response == "1") {   // everything successful. inserted and verified.
+											// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+											window.location.href = "dashboard.php";
+										}
+										else if(response == "2") {   // cannot be verified.
+											popup.children('p').remove();
+											popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+										}
+										else if(response == "3") {   // cannot be inserted.
+											popup.children('p').remove();
+											popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+										}
+										else {
+											popup.children('p').remove();
+											popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+										}
+									},
+									error: function(res) {
+
+										console.log(res);
+
+										var response = res.responseText;
+
+										if(response == "1") {   // everything successful. inserted and verified.
+											// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+											window.location.href = "dashboard.php";
+										}
+										else if(response == "2") {   // cannot be verified.
+											popup.children('p').remove();
+											popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+										}
+										else if(response == "3") {   // cannot be inserted.
+											popup.children('p').remove();
+											popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+										}
+										else {
+											popup.children('p').remove();
+											popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+										}
+
+										// popup.children('p').remove();
+										// popup.append("<p>1. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+									}
+								});
+
+
 							}
 							else if(response == "2") {   // coupon does not exists.
 								popup.children('p').remove();
@@ -435,63 +499,6 @@
 							popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
 						}
 					}).done(function() {
-
-						var pwd = $('#txtSignupPwd').val();
-
-						// now, insert or update the Register table for the new verified user.
-						$.ajax({
-							type: "POST",
-							url: "AJAXFunctions.php",
-							data: {
-								no: "6", signemail: getCookie("userEmail"), signname: getCookie("userName"), signpwd: pwd
-							},
-							success: function(response) {
-								response = $.trim(response);
-
-								if(response == "1") {   // everything successful. inserted and verified.
-									// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
-									window.location.href = "dashboard.php";
-								}
-								else if(response == "2") {   // cannot be verified.
-									popup.children('p').remove();
-									popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
-								}
-								else if(response == "3") {   // cannot be inserted.
-									popup.children('p').remove();
-									popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
-								}
-								else {
-									popup.children('p').remove();
-									popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
-								}
-							},
-							error: function(res) {
-
-								console.log(res);
-
-								var response = res.responseText;
-
-								if(response == "1") {   // everything successful. inserted and verified.
-									// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
-									window.location.href = "dashboard.php";
-								}
-								else if(response == "2") {   // cannot be verified.
-									popup.children('p').remove();
-									popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
-								}
-								else if(response == "3") {   // cannot be inserted.
-									popup.children('p').remove();
-									popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
-								}
-								else {
-									popup.children('p').remove();
-									popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
-								}
-
-								// popup.children('p').remove();
-								// popup.append("<p>1. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
-							}
-						});
 
 						$('#alertMsg').children('p').remove();
 						$('#alertMsg').fadeOut();

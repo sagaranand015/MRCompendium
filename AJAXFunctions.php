@@ -54,7 +54,7 @@ function AddToInvites($email, $name, $isRequest) {
 			$mailBody .= "<br />MR - Compendium";
 			$mailBody .= "<br /><a href='http://mentored-research.com'>Mentored-Research</a>";
 
-			if(SendRequestInviteMail("guide@mentored-research.com", $email, $subject, $mailBody) == "1") {
+			if(SendRequestInviteMail("tech@mentored-research.com", $email, $subject, $mailBody) == "1") {
 				$response = "1";
 			}
 			else {

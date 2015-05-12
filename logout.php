@@ -133,6 +133,12 @@
                 return false;
             });
 
+            // for the login button.
+            $('#login').on('click', function() {
+                window.location.href = "http://mentored-research.com/Compendium?login=1";
+                return false;
+            });
+
         });
     </script>
 
@@ -167,7 +173,7 @@
 	                        <a href="#page-top"></a>
 	                    </li>
 	                    <li>
-	                    	<a href="#" class="page-scroll">Login</a>
+	                    	<a href="#" id="login" class="page-scroll">Login</a>
 	                    </li>
 	                    <li>
 	                    	<a href="http://mentored-research.com/Compendium" id="home" class="page-scroll">Home</a>
