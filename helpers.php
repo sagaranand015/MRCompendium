@@ -10,11 +10,10 @@ function SendRequestInviteMail($from, $to, $subject, $body) {
 	$res = "-1";
 	try{
 
-		$Header = 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		$Header .= 'From: MR - Compendium (Mentored-Research)<tech@mentored-research.com>' . "\r\n";
+		$Header = "Content-type: text/html; charset=iso-8859-1" . "\r\n" . "From: MR - Compendium (Mentored-Research)<guide@mentored-research.com>" . "\r\n";
 		$message = $body;
 
-		if(mail($to,$subject,$message,$Header) == true) {
+		if(mail($to,$subject,$message) == true) {
 			$res = "1";
 		}
 		else {

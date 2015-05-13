@@ -28,12 +28,12 @@ else if(isset($_GET["no"]) && $_GET["no"] == "7") {   // for authentication of p
 	AuthenticateUser($_GET["email"], $_GET["pwd"]);
 }
 else if(isset($_GET["no"]) && $_GET["no"] == "8") {   // for adding the user to Users table for invite requests.
-	AddToInvites($_GET["email"], $_GET["name"], "1");    // 1 is for indicating that the user has requested the invite himself.
+	AddToInvites($_GET["email"], $_GET["name"], "1", $_GET["pwd"]);    // 1 is for indicating that the user has requested the invite himself.
 }
 
 // this is the function to add the user to Users table for requesting invites.
 // returns 1 on all success. 2 on insert success and mail failure. -1 on Error and all failures.
-function AddToInvites($email, $name, $isRequest) {
+function AddToInvites($email, $name, $isRequest, $pwd) {
 	$response = "-1";
 	$date = date("Y-m-d H:i:s");
 	$mailBody = "";
@@ -53,6 +53,9 @@ function AddToInvites($email, $name, $isRequest) {
 			$mailBody .= "<br /><br />Thank You.";
 			$mailBody .= "<br />MR - Compendium";
 			$mailBody .= "<br /><a href='http://mentored-research.com'>Mentored-Research</a>";
+
+			// here, add the userEmail to the Register table, to eliminate one more sign up.
+			InsertUserRegister($email, $name, $pwd);
 
 			if(SendRequestInviteMail("tech@mentored-research.com", $email, $subject, $mailBody) == "1") {
 				$response = "1";

@@ -93,6 +93,11 @@
         	overflow: auto;
         }
 
+        #buyCompendium {
+        	margin-top: 13%;
+        	margin-bottom: 15%;
+        }
+
     </style>
 
     <script type="text/javascript">
@@ -121,15 +126,122 @@
             // for checking the query string and all.
 	    	var qs = getQueryStrings();
 
-	    	console.log("I m here and working!!");
-	    	console.log(qs["login"]);
-
 	    	if(qs["login"] == "1") {   // show the login modal.
 	    		$('#loginModal').modal('show');
 	    	}
 	    	else {   // do nothing here.
 
 	    	}
+
+	    	// this is the function for verifying the invite code [only for the Signup case]
+	    	function VerifyInviteCode(code) {
+
+	    		if(code == "") {
+					popup.children('p').remove();
+					popup.append("<p>Please enter the coupon code for us to activate your Compendium.</p>").fadeIn();
+					$('#couponModal').modal('show');
+				} 
+				// else {					
+				// }    // end of else.
+
+				// do all the compendium stuff here.
+				// here, firstly check if the coupon code is correct. If yes, (add or update) the Entry in Register table. Otherwise, enter again.
+				$('#alertMsg').children('p').remove();
+				$('#alertMsg').append("<p>Please wait while we check your Coupon code. Signing you in a minute...</p>").fadeIn();
+				$.ajax({
+					type: "GET",
+					url: "AJAXFunctions.php",
+					data: {
+						no: "5", code: code
+					},
+					success: function(response) {
+						response = $.trim(response);
+
+						if(response == "1") {   // valid coupon exists.
+							codeResp = response;
+
+							var pwd = $('#txtSignupPwd').val();
+
+							// now, insert or update the Register table for the new verified user.
+							$.ajax({
+								type: "POST",
+								url: "AJAXFunctions.php",
+								data: {
+									no: "6", signemail: getCookie("userEmail"), signname: getCookie("userName"), signpwd: pwd
+								},
+								success: function(response) {
+									response = $.trim(response);
+
+									if(response == "1") {   // everything successful. inserted and verified.
+										// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+										window.location.href = "dashboard.php";
+									}
+									else if(response == "2") {   // cannot be verified.
+										popup.children('p').remove();
+										popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+									}
+									else if(response == "3") {   // cannot be inserted.
+										popup.children('p').remove();
+										popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+									}
+									else {
+										popup.children('p').remove();
+										popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+									}
+								},
+								error: function(res) {
+
+									console.log(res);
+
+									var response = res.responseText;
+
+									if(response == "1") {   // everything successful. inserted and verified.
+										// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+										window.location.href = "dashboard.php";
+									}
+									else if(response == "2") {   // cannot be verified.
+										popup.children('p').remove();
+										popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+									}
+									else if(response == "3") {   // cannot be inserted.
+										popup.children('p').remove();
+										popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+									}
+									else {
+										popup.children('p').remove();
+										popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+									}
+
+									// popup.children('p').remove();
+									// popup.append("<p>1. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+							});
+						}
+						else if(response == "2") {   // coupon does not exists.
+							popup.children('p').remove();
+							popup.append("<p>Oops! The coupon code you entered did not match to anything we have. Please try again.</p>").fadeIn();
+						}
+						else if(response == "3") {   // coupon is invalid.
+							popup.children('p').remove();
+							popup.append("<p>Oops! The coupon code you entered has expired. Please try again or request another invite.</p>").fadeIn();	
+						}
+						else {   // error condition.
+							popup.children('p').remove();
+							popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
+						}
+					},
+					error: function() {
+						popup.children('p').remove();
+						popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
+					}
+				}).done(function() {
+
+					$('#alertMsg').children('p').remove();
+					$('#alertMsg').fadeOut();
+
+				});
+
+	    	}  //end of verify function!
 
              // for the onBoarding of Signup.
 	        function onBoardSignupManual(FbEmail, FbName) {
@@ -180,10 +292,12 @@
 									$('.requestSalutation').html("<b>Hey " + getCookie("userName") + "! <br /></b>");
 								}
 								else if(response == "1") {   // user exists in the Users table.
-									$('#couponModal').modal('show');
+									//$('#couponModal').modal('show');
+									VerifyInviteCode($('#txtCode').val());
 								}
 								else if(response == "-3") {    // user exists more than once.
-									$('#couponModal').modal('show');	
+									//$('#couponModal').modal('show');	
+									VerifyInviteCode($('#txtCode').val());
 								}
 								else {
 									$('#popup').children('p').remove();
@@ -395,6 +509,7 @@
 			// for the coupon code acceptance
 			$('#btnCouponCode').on('click', function() {
 
+				// coupon code value is being taken from textbox in the Signup Modal.
 				var code = $('#txtCouponCode').val();
 				code = code.trim();
 
@@ -478,8 +593,6 @@
 										// popup.append("<p>1. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
 									}
 								});
-
-
 							}
 							else if(response == "2") {   // coupon does not exists.
 								popup.children('p').remove();
@@ -526,10 +639,12 @@
 						type: "GET",
 						url: "AJAXFunctions.php",
 						data: {
-							no: "8", email: getCookie("userEmail"), name: getCookie("userName")
+							no: "8", email: getCookie("userEmail"), name: getCookie("userName"), pwd: $('#txtSignupPwd').val()
 						},
 						success: function(response) {
 							response = $.trim(response);
+
+							alert(response);
 
 							alertMsg.children('p').remove();
 							alertMsg.fadeOut();
@@ -580,6 +695,30 @@
 				return false;
 			});
 
+			// for the login and signup functionality!
+
+			// for the get started button.
+			$('#btnGetStarted').on('click', function() {
+				$('#signupModal').modal('show');
+				return false;
+			});
+
+			// hide the manual Signup div.
+			$('#manualSignupTable').slideUp();
+
+			// wire up the other Signup button
+			$('#otherSignup').on('click', function() {
+				$('#manualSignupTable').slideToggle();
+				return false;
+			});
+
+			// to show the login modal on click of btnAlreadyRegistered.
+			$('#btnAlreadyRegistered').on('click', function() {
+				$('#signupModal').modal('hide');
+				$('#loginModal').modal('show');
+				return false;
+			});
+
         });    // end of ready function.
 
 	</script>
@@ -595,6 +734,116 @@
             popup.fadeOut();
             return false;
         });
+
+        // this is the function for verifying the invite code [only for the Signup case]
+    	function VerifyInviteCodeFacebook(code) {
+
+    		if(code == "") {
+				popup.children('p').remove();
+				popup.append("<p>Please enter the coupon code for us to activate your Compendium.</p>").fadeIn();
+				$('#couponModal').modal('show');
+			} 
+			// else {					
+			// }    // end of else.
+
+			// do all the compendium stuff here.
+			// here, firstly check if the coupon code is correct. If yes, (add or update) the Entry in Register table. Otherwise, enter again.
+			$('#alertMsg').children('p').remove();
+			$('#alertMsg').append("<p>Please wait while we check your Coupon code. Signing you in a minute...</p>").fadeIn();
+			$.ajax({
+				type: "GET",
+				url: "AJAXFunctions.php",
+				data: {
+					no: "5", code: code
+				},
+				success: function(response) {
+					response = $.trim(response);
+
+					if(response == "1") {   // valid coupon exists.
+						codeResp = response;
+
+						var pwd = $('#txtSignupPwd').val();
+
+						// now, insert or update the Register table for the new verified user.
+						$.ajax({
+							type: "POST",
+							url: "AJAXFunctions.php",
+							data: {
+								no: "6", signemail: getCookie("userEmail"), signname: getCookie("userName"), signpwd: pwd
+							},
+							success: function(response) {
+								response = $.trim(response);
+
+								if(response == "1") {   // everything successful. inserted and verified.
+									// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+									window.location.href = "dashboard.php";
+								}
+								else if(response == "2") {   // cannot be verified.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+								}
+								else if(response == "3") {   // cannot be inserted.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+								else {
+									popup.children('p').remove();
+									popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+							},
+							error: function(res) {
+
+								console.log(res);
+
+								var response = res.responseText;
+
+								if(response == "1") {   // everything successful. inserted and verified.
+									// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+									window.location.href = "dashboard.php";
+								}
+								else if(response == "2") {   // cannot be verified.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+								}
+								else if(response == "3") {   // cannot be inserted.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+								else {
+									popup.children('p').remove();
+									popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+
+								// popup.children('p').remove();
+								// popup.append("<p>1. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+							}
+						});
+					}
+					else if(response == "2") {   // coupon does not exists.
+						popup.children('p').remove();
+						popup.append("<p>Oops! The coupon code you entered did not match to anything we have. Please try again.</p>").fadeIn();
+					}
+					else if(response == "3") {   // coupon is invalid.
+						popup.children('p').remove();
+						popup.append("<p>Oops! The coupon code you entered has expired. Please try again or request another invite.</p>").fadeIn();	
+					}
+					else {   // error condition.
+						popup.children('p').remove();
+						popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
+					}
+				},
+				error: function() {
+					popup.children('p').remove();
+					popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
+				}
+			}).done(function() {
+
+				$('#alertMsg').children('p').remove();
+				$('#alertMsg').fadeOut();
+
+			});
+
+    	}  //end of verify function for facebook!
 
         // for the onBoarding of Signup, using Facebook
         function onBoardSignupFacebook(FbEmail, FbName) {
@@ -651,7 +900,8 @@
 							}
 							else if(response == "1") {   // user exists in the Users table.
 								//alert("Go to the Coupon Code page.");
-								$('#couponModal').modal('show');
+								//$('#couponModal').modal('show');
+								VerifyInviteCodeFacebook($('#txtCode').val());
 							}
 							else if(response == "-3") {
 								//alert("User Email exists more than once. ");
@@ -749,14 +999,15 @@
             else if (response.status === 'not_authorized') {   // The person is logged into Facebook, but not your app.
               //alert("Please login into the  MR-QR app.");
               console.log(" not_authorized.");
-              popup.children('p').remove();
-              popup.append("<p>Please login into the MR - Compendium app to continue.</p>").fadeIn('fast');
+              $('#popup').children('p').remove();
+              $('#popup').append("<p>Please login into the MR - Compendium app to continue.</p>").fadeIn('fast');
             } 
             else {
                 //alert("Please login into facebook and the app too!!");
                 console.log("Not logged into fb.");
-                popup.children('p').remove();
-              	popup.append("<p>Please login into your facebook account to continue.</p>").fadeIn('fast');
+               //  $('#popup').children('p').remove();
+              	// $('#popup').append("<p>Please login into your facebook account to continue.</p>").fadeIn('fast');
+              	window.open("http://www.facebook.com", "_blank");
             }
     	}
 
@@ -776,8 +1027,9 @@
             else {
                 //alert("Please login into facebook and the app too!!");
                 console.log("Not logged into fb.");
-            	popup.children('p').remove();
-              	popup.append("<p>Please login into your facebook account to continue.</p>").fadeIn('fast');
+            	$('#popup').children('p').remove();
+              	$('#popup').append("<p>Please login into your facebook account to continue.</p>").fadeIn('fast');
+              	window.open("http://www.facebook.com", "_blank");
             }
     	}
 
@@ -882,6 +1134,116 @@
             return false;
         });
 
+        // this is the function for verifying the invite code [only for the Signup case]
+    	function VerifyInviteCodeGoogle(code) {
+
+    		if(code == "") {
+				popup.children('p').remove();
+				popup.append("<p>Please enter the coupon code for us to activate your Compendium.</p>").fadeIn();
+				$('#couponModal').modal('show');
+			} 
+			// else {					
+			// }    // end of else.
+
+			// do all the compendium stuff here.
+			// here, firstly check if the coupon code is correct. If yes, (add or update) the Entry in Register table. Otherwise, enter again.
+			$('#alertMsg').children('p').remove();
+			$('#alertMsg').append("<p>Please wait while we check your Coupon code. Signing you in a minute...</p>").fadeIn();
+			$.ajax({
+				type: "GET",
+				url: "AJAXFunctions.php",
+				data: {
+					no: "5", code: code
+				},
+				success: function(response) {
+					response = $.trim(response);
+
+					if(response == "1") {   // valid coupon exists.
+						codeResp = response;
+
+						var pwd = $('#txtSignupPwd').val();
+
+						// now, insert or update the Register table for the new verified user.
+						$.ajax({
+							type: "POST",
+							url: "AJAXFunctions.php",
+							data: {
+								no: "6", signemail: getCookie("userEmail"), signname: getCookie("userName"), signpwd: pwd
+							},
+							success: function(response) {
+								response = $.trim(response);
+
+								if(response == "1") {   // everything successful. inserted and verified.
+									// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+									window.location.href = "dashboard.php";
+								}
+								else if(response == "2") {   // cannot be verified.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+								}
+								else if(response == "3") {   // cannot be inserted.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+								else {
+									popup.children('p').remove();
+									popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+							},
+							error: function(res) {
+
+								console.log(res);
+
+								var response = res.responseText;
+
+								if(response == "1") {   // everything successful. inserted and verified.
+									// alert("Go to dashboard page." + getCookie("userEmail") + " --> " + getCookie("userName"));
+									window.location.href = "dashboard.php";
+								}
+								else if(response == "2") {   // cannot be verified.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while verifying your coupon and email. Please try again.</p>").fadeIn();	
+								}
+								else if(response == "3") {   // cannot be inserted.
+									popup.children('p').remove();
+									popup.append("<p>Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+								else {
+									popup.children('p').remove();
+									popup.append("<p>2. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+								}
+
+								// popup.children('p').remove();
+								// popup.append("<p>1. Oops! We encountered an error while registering this email address. Please try again.</p>").fadeIn();
+							}
+						});
+					}
+					else if(response == "2") {   // coupon does not exists.
+						popup.children('p').remove();
+						popup.append("<p>Oops! The coupon code you entered did not match to anything we have. Please try again.</p>").fadeIn();
+					}
+					else if(response == "3") {   // coupon is invalid.
+						popup.children('p').remove();
+						popup.append("<p>Oops! The coupon code you entered has expired. Please try again or request another invite.</p>").fadeIn();	
+					}
+					else {   // error condition.
+						popup.children('p').remove();
+						popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
+					}
+				},
+				error: function() {
+					popup.children('p').remove();
+					popup.append("<p>Oops! We encountered an error while checking the coupons. Please try again.</p>").fadeIn();
+				}
+			}).done(function() {
+
+				$('#alertMsg').children('p').remove();
+				$('#alertMsg').fadeOut();
+
+			});
+
+    	}  //end of verify function for google!
+
         // for the onBoarding of Signup. [in Google]
         function onBoardSignupGoogle(FbEmail, FbName) {
 
@@ -937,11 +1299,13 @@
 							}
 							else if(response == "1") {   // user exists in the Users table.
 								//alert("Go to the Coupon Code page.");
-								$('#couponModal').modal('show');
+								//$('#couponModal').modal('show');
+								VerifyInviteCodeGoogle($('#txtCode').val());
 							}
 							else if(response == "-3") {
 								//alert("User Email exists more than once. ");
-								$('#couponModal').modal('show');
+								//$('#couponModal').modal('show');
+								VerifyInviteCodeGoogle($('#txtCode').val());
 							}
 							else {
 								$('#popup').children('p').remove();
@@ -1179,6 +1543,9 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
+                    	<a class="page-scroll" href="#" id="btnGetStarted">Get Started</a>
+                    </li>
+                    <!-- <li>
                         <a class="page-scroll" href="#about">About</a>
                     </li>
                     <li>
@@ -1192,7 +1559,7 @@
                     </li>
                     <li>
                         <a href="#" id="signup" data-toggle="modal" data-target="#signupModal">Sign up</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -1398,7 +1765,7 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">Log in to MR - Compendium</h4>
                 </div>
-                <div class="modal-body col-lg-6 col-md-6" id="socialLogin"> 
+                <div class="modal-body col-lg-6 col-md-6"> 
 
                     <h3>
                         Social Media Login
@@ -1463,52 +1830,67 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">Sign up for MR - Compendium</h4>
                 </div>
-                <div class="modal-body col-lg-6 col-md-6" id="socialLogin"> 
 
-                    <h3>
-                        Social Media Signup
-                    </h3>
+                <div class="modal-body col-lg-12 col-md-12">
 
-                    <button id="btnFbSignup" class="btn btn-lg btn-block btn-social btn-facebook" style="margin: 8% 0% 2% 0%;" onclick="checkSignupState();">
-                        <i class="fa fa-facebook"></i>
-                        Facebook Signup
-                    </button> 
+                	<p class="text-center">
+                		<a href="#" id="btnAlreadyRegistered">Already Registered? Login here</a>
+                	</p>
 
-                    <button id="btnGoogleSignup" class="btn btn-lg btn-block btn-social btn-google" style="margin: 3% 0% 2% 0%;">
-                        <i class="fa fa-google"></i>
-                        Google Signup
-                    </button>    
+                	<div class="col-lg-6 col-md-6" id="socialLogin"> 
 
-                </div>
+	                    <h3>
+	                        Sign up MR-Compendium
+	                    </h3>
 
-                <div class="modal-body col-lg-6 col-md-6" id="manualSignup">
+	                    <input type="text" class="form-control" id="txtCode" placeholder="Enter Invite Code" />
 
-                    <h3>
-                        Sign up here                        
-                    </h3>
+	                    <button id="btnFbSignup" class="btn btn-lg btn-block btn-social btn-facebook" style="margin: 8% 0% 2% 0%;" onclick="checkSignupState();">
+	                        <i class="fa fa-facebook"></i>
+	                        Facebook Signup
+	                    </button> 
 
-                    <table class="table">
-                    	<tr>
-                            <td>
-                                <input type="text" id="txtSignupName" placeholder="Your Name *" class="form-control" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="email" id="txtSignupEmail" placeholder="Email Address *" class="form-control" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input type="password" id="txtSignupPwd" placeholder="Password *" class="form-control" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button class="btn btn-lg btn-block btn-primary" id="btnSignupManual">Sign up</button>
-                            </td>
-                        </tr>
-                    </table>
+	                    <button id="btnGoogleSignup" class="btn btn-lg btn-block btn-social btn-google" style="margin: 3% 0% 2% 0%;">
+	                        <i class="fa fa-google"></i>
+	                        Google Signup
+	                    </button>
+
+	                    <br />
+
+	                    <p class="text-center">
+	                		<a href="#" id="otherSignup">Sign up with another Email Address</a>   
+	                	</p>
+	                    
+						<table class="table" id="manualSignupTable">
+	                    	<tr>
+	                            <td>
+	                                <input type="text" id="txtSignupName" placeholder="Your Name *" class="form-control" />
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                                <input type="email" id="txtSignupEmail" placeholder="Email Address *" class="form-control" />
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                                <input type="password" id="txtSignupPwd" placeholder="Password *" class="form-control" />
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                                <button class="btn btn-lg btn-block btn-primary" id="btnSignupManual">Sign up</button>
+	                            </td>
+	                        </tr>
+	                    </table>
+
+	                </div>
+
+	                <div class="col-lg-6 col-md-6" id="buyCompendium">
+						<button id="btnBuyCompendium" class="btn btn-lg btn-primary btn-block">
+							Buy Compendium for Rs. 349
+						</button>
+	                </div>
 
                 </div>
 
@@ -1533,7 +1915,7 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">Activate your Compendium</h4>
                 </div>
-                <div class="modal-body" id="socialLogin"> 
+                <div class="modal-body"> 
 
                 	<br /><br />
 
@@ -1575,7 +1957,7 @@
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel">Request Invite for Compendium</h4>
                 </div>
-                <div class="modal-body" id="socialLogin"> 
+                <div class="modal-body"> 
 
                 	<br /><br />
 
