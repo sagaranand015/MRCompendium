@@ -6,14 +6,26 @@
 include 'headers/databaseConn.php';
 
 //this is the function to send the mail to the user who requested the connection, as a confirmation.
-function SendRequestInviteMail($from, $to, $subject, $body) {
+function SendRequestInviteMail($to, $toName) {
 	$res = "-1";
+	$mailBody = "";
 	try{
 
-		$Header = "Content-type: text/html; charset=iso-8859-1" . "\r\n" . "From: MR - Compendium (Mentored-Research)<guide@mentored-research.com>" . "\r\n";
-		$message = $body;
+		$subject = "MR - Compendium Invitation Received";
 
-		if(mail($to,$subject,$message) == true) {
+		$headers = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+		$headers .= "From: guide@mentored-research.com" . "\r\n";
+		// write the mail body here.
+		$mailBody .= "<h1>MR - Compendium Invitation</h1><br />";
+		$mailBody .= "Dear " . $toName . "<br />";
+		$mailBody .= "Your Invite Code for MR - Compendium Access is: <b>testCoupon</b>. Please go ahead and use this code on <code>http://mentored-research.com/Compendium</code> to activate your Compendium Account.<br />";
+
+		$mailBody .= "<br /><br />Thank You.";
+		$mailBody .= "<br />MR - Compendium";
+		$mailBody .= "<br /><a href='http://mentored-research.com'>Mentored-Research</a>";
+
+		if(mail($to, $subject, $mailBody, $headers) == true) {
 			$res = "1";
 		}
 		else {

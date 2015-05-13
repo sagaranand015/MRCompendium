@@ -37,7 +37,6 @@ function AddToInvites($email, $name, $isRequest, $pwd) {
 	$response = "-1";
 	$date = date("Y-m-d H:i:s");
 	$mailBody = "";
-	$subject = "MR - Compendium Invitation Received";
 	try {
 		$query = "insert into Users(Name, Email, IsRequest, UpdatedOn) values('$name', '$email', '$isRequest', '$date')";
 		$rs = mysql_query($query);
@@ -45,19 +44,10 @@ function AddToInvites($email, $name, $isRequest, $pwd) {
 			$response = "-1";
 		}
 		else {
-			// write the mail body here.
-			$mailBody .= "<h1>MR - Compendium Invitation</h1><br />";
-			$mailBody .= "Dear " . $name . "<br />";
-			$mailBody .= "Your Invite Code for MR - Compendium Access is: <b>testCoupon</b>. Please go ahead and use this code on <code>http://mentored-research.com/Compendium</code> to activate your Compendium Account.<br />";
-
-			$mailBody .= "<br /><br />Thank You.";
-			$mailBody .= "<br />MR - Compendium";
-			$mailBody .= "<br /><a href='http://mentored-research.com'>Mentored-Research</a>";
-
 			// here, add the userEmail to the Register table, to eliminate one more sign up.
 			InsertUserRegister($email, $name, $pwd);
 
-			if(SendRequestInviteMail("tech@mentored-research.com", $email, $subject, $mailBody) == "1") {
+			if(SendRequestInviteMail($email, $name) == "1") {
 				$response = "1";
 			}
 			else {

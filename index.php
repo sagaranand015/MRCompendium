@@ -644,8 +644,6 @@
 						success: function(response) {
 							response = $.trim(response);
 
-							alert(response);
-
 							alertMsg.children('p').remove();
 							alertMsg.fadeOut();
 
