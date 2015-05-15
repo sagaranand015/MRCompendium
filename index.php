@@ -98,6 +98,22 @@
         	margin-bottom: 15%;
         }
 
+        #overlay {
+        	position:absolute;
+		    top:0;
+		    left:0;
+		    width:100%;
+		    height:100%;
+		    background-color:#000000;
+		    opacity:0.6;
+		    background-position: center center;
+		    background-repeat: none;
+		    -webkit-background-size: cover;
+		    -moz-background-size: cover;
+		    background-size: cover;
+		    -o-background-size: cover;
+        }
+
     </style>
 
     <script type="text/javascript">
@@ -716,6 +732,13 @@
 				$('#loginModal').modal('show');
 				return false;
 			});
+
+			// for the login button on the navbar 
+			$('#btnLogin').on('click', function() {
+				$('#signupModal').modal('hide');
+				$('#loginModal').modal('show');
+				return false;
+			})
 
         });    // end of ready function.
 
@@ -1552,23 +1575,8 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                    	<a class="page-scroll" href="#" id="btnGetStarted">Get Started</a>
+                    	<a class="page-scroll" href="#" id="btnLogin">Login</a>
                     </li>
-                    <!-- <li>
-                        <a class="page-scroll" href="#about">About</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#services">Services</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#contact">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#" id="login" data-toggle="modal" data-target="#loginModal">Login</a>
-                    </li>
-                    <li>
-                        <a href="#" id="signup" data-toggle="modal" data-target="#signupModal">Sign up</a>
-                    </li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -1577,11 +1585,16 @@
     </nav>
 
     <!-- Header -->
+    <!-- <div id="overlay">		
+	</div> -->
     <header>
         <div class="container">
             <div class="intro-text">
                 <!-- <div class="intro-lead-in">MR - Compendium</div> -->
                 <div class="intro-heading" style="font-family: writingText;">Your resources, all in one place</div>
+                <button id="btnGetStarted" class="btn btn-lg btn-primary">
+	            	Get Started
+	            </button>
             </div>
         </div>
     </header>
@@ -1592,7 +1605,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">About MR - Compendium</h2>
-                    <h3 class="section-subheading text-muted">this is the place for giving more details about MR Connect. </h3>
+                    <h3 class="section-subheading text-muted">With a crisp summary of the important developments in the past quarter, The Compendium is the go-to resource to move one step closer to success.</h3>
                 </div>
             </div>
             <div class="row">
@@ -1604,11 +1617,11 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h4>2009-2011</h4>
-                                    <h4 class="subheading">Our Humble Beginnings</h4>
+                                    <!-- <h4>2009-2011</h4> -->
+                                    <h4 class="subheading">Gain Access to MR-Compendium</h4>
                                 </div>
                                 <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                                    <p class="text-muted">Gain access to this edition of the Compendium, either by invite or buy the edition</p>
                                 </div>
                             </div>
                         </li>
@@ -1618,11 +1631,11 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h4>March 2011</h4>
-                                    <h4 class="subheading">An Agency is Born</h4>
+                                    <!-- <h4>March 2011</h4> -->
+                                    <h4 class="subheading">Stimulate your Visual/Audio Memory</h4>
                                 </div>
                                 <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                                    <p class="text-muted">Read the online documents and/or listen to the crisp audio news, all inside one resource, MR-Compendium</p>
                                 </div>
                             </div>
                         </li>
@@ -1632,11 +1645,11 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h4>December 2012</h4>
-                                    <h4 class="subheading">Transition to Full Service</h4>
+                                    <!-- <h4>December 2012</h4> -->
+                                    <h4 class="subheading">Update Yourself</h4>
                                 </div>
                                 <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                                    <p class="text-muted">Gain insights on the latest macroeconomic news and financial deals, with supplements from Sector Bites and Startup News</p>
                                 </div>
                             </div>
                         </li>
@@ -1646,11 +1659,11 @@
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
-                                    <h4>July 2014</h4>
-                                    <h4 class="subheading">Phase Two Expansion</h4>
+                                    <!-- <h4>July 2014</h4> -->
+                                    <h4 class="subheading">Arm Yourself for the Interviews</h4>
                                 </div>
                                 <div class="timeline-body">
-                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                                    <p class="text-muted"> Increase your general awareness, make use of these resources to prepare for B-school interviews or job interviews</p>
                                 </div>
                             </div>
                         </li>
@@ -1673,26 +1686,26 @@
                 <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                        <i class="fa fa-users fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">E-Commerce</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="service-heading">On-The-Go Flexibility</h4>
+                    <p class="text-muted">Access the audios and the reading material anytime, anywhere</p>
                 </div>
                 <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fa fa-laptop fa-stack-1x fa-inverse"></i>
+                        <i class="fa fa-flash fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Responsive Design</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="service-heading">Up-to-Date Material</h4>
+                    <p class="text-muted">All the latest happenings of the financial work, in crisp, documented and short news articles and audios</p>
                 </div>
                 <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fa fa-lock fa-stack-1x fa-inverse"></i>
+                        <i class="fa fa-file-pdf-o fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Web Security</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="service-heading">Viewable Online Docs</h4>
+                    <p class="text-muted">View/Read the financial Docs and news, with just a click</p>
                 </div>
             </div>
         </div>
@@ -1703,7 +1716,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Contact Us</h2>
-                    <h3 class="section-subheading text-muted">This will be there for any queries that a user might have regarding this initiative.</h3>
+                    <h3 class="section-subheading text-muted">Put in a message to the MR - Compendium Team and we'd get back to you in 48 hours</h3>
                 </div>
             </div>
             <div class="row">
