@@ -718,7 +718,7 @@
 					<img src="img/startups/9gag.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
-							9GAG
+							9GAG - modified.
 						</h3>
 					</div>
 				</a>
