@@ -524,6 +524,9 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
+                    	<a href="http://mentored-research.com/" target="_blank" id="mrHome">MR-Home</a>
+                    </li>
+                    <li>
                     	<a href="#" id="logout">Logout</a>
                     </li>
                 </ul>
