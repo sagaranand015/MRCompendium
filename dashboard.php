@@ -286,90 +286,172 @@
 
             		if($(this).attr('data-item') == "australia") {   // for the australia macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - Australia");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/australia/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/australia/2.jpeg' alt='2' />"  + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/australia/3.jpeg' alt='3' />"  + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/australia/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/australia/2.jpg' alt='2' />"  + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/australia/3.jpg' alt='3' />"  + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "china") {   // for the chine macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - China");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/china/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/china/2.jpeg' alt='2' />"  + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/china/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/china/2.jpg' alt='2' />"  + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "crudeOil") {   // for the Crude Oil macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - Crude Oil");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/crudeOil/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/crudeOil/2.jpeg' alt='2' />"  + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/crudeOil/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/crudeOil/2.jpg' alt='2' />"  + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "germany") {   // for the Germany macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - Germany");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/germany/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/germany/2.jpeg' alt='2' />"  + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/germany/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/germany/2.jpg' alt='2' />"  + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "gold") {   // for the Gold macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - Gold");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/gold/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/gold/2.jpeg' alt='2' />"  + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/gold/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/gold/2.jpg' alt='2' />"  + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "india") {   // for the India macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - India");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/india/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/india/2.jpeg' alt='2' />"  + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/india/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/india/2.jpg' alt='2' />"  + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "singapore") {   // for the Singapore macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - Singapore");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/singapore/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/singapore/2.jpeg' alt='2' />"  + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/singapore/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/singapore/2.jpg' alt='2' />"  + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "usa") {   // for the USA macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - USA");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/usa/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/usa/2.jpeg' alt='2' />"  + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/usa/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/usa/2.jpg' alt='2' />"  + "<br />");
             			contentModal.modal('show');
+            		}
+            		else {
+            			popup.children('p').remove();
+	            		popup.append("<p>Oops! We encountered an error during this operation. Please try again.</p>").fadeIn();
             		}
             	}
             	else if(selector == "financial") {
 
             		if($(this).attr('data-item') == "MA") {   // for the Mergers and Acquisitions financial Deals
             			contentModalTitle.html("Financial Deals - Mergers and Acquisitions");
-            			contentModalBody.html("<img class='modalImg' src='content/financial/ma/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/2.jpeg' alt='2' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/3.jpeg' alt='3' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/4.jpeg' alt='4' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/5.jpeg' alt='5' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/6.jpeg' alt='6' />" + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/financial/ma/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/2.jpg' alt='2' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/3.jpg' alt='3' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/4.jpg' alt='4' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/5.jpg' alt='5' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/6.jpg' alt='6' />" + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "PE") {   // for the Private Equity financial Deals
             			contentModalTitle.html("Financial Deals - Private Equity Deals");
-            			contentModalBody.html("<img class='modalImg' src='content/financial/pe/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/pe/2.jpeg' alt='2' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/pe/3.jpeg' alt='3' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/pe/4.jpeg' alt='4' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/pe/5.jpeg' alt='5' />" + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/financial/pe/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/pe/2.jpg' alt='2' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/pe/3.jpg' alt='3' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/pe/4.jpg' alt='4' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/pe/5.jpg' alt='5' />" + "<br />");
             			contentModal.modal('show');
             		}
             		else if($(this).attr('data-item') == "VC") {   // for the Private Equity financial Deals
             			contentModalTitle.html("Financial Deals - Venture Capital Deals");
-            			contentModalBody.html("<img class='modalImg' src='content/financial/vc/1.jpeg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/vc/2.jpeg' alt='2' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/vc/3.jpeg' alt='3' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/vc/4.jpeg' alt='4' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/vc/5.jpeg' alt='5' />" + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/financial/vc/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/vc/2.jpg' alt='2' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/vc/3.jpg' alt='3' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/vc/4.jpg' alt='4' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/financial/vc/5.jpg' alt='5' />" + "<br />");
             			contentModal.modal('show');
+            		}
+            		else {
+            			popup.children('p').remove();
+	            		popup.append("<p>Oops! We encountered an error during this operation. Please try again.</p>").fadeIn();
             		}
             	}
             	else if(selector == "sector") {
             		
+            		if($(this).attr('data-item') == "food") {
+            			contentModalTitle.html("Sector Bites - Food Startups");
+            			contentModalBody.html("<img class='modalImg' src='content/sector/food/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/sector/food/2.jpg' alt='2' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/sector/food/3.jpg' alt='3' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "health") {
+            			contentModalTitle.html("Sector Bites - Health Startups");
+            			contentModalBody.html("<img class='modalImg' src='content/sector/health/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/sector/health/2.jpg' alt='2' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/sector/health/3.jpg' alt='3' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else {
+            			popup.children('p').remove();
+	            		popup.append("<p>Oops! We encountered an error during this operation. Please try again.</p>").fadeIn();
+            		}
+
             	}
             	else if(selector == "startups") {
             		
+            		if($(this).attr('data-item') == "9GAG") {
+            			contentModalTitle.html("Startups - 9GAG");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/9GAG.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "BOOKMYSHOW") {
+            			contentModalTitle.html("Startups - BOOK MY SHOW");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/BOOKMYSHOW.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "EVENTBRITE") {
+            			contentModalTitle.html("Startups - EVENT BRITE");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/EVENTBRITE.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "FRESHDESK") {
+            			contentModalTitle.html("Startups - FRESH DESK");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/FRESHDESK.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "GOIBIBO") {
+            			contentModalTitle.html("Startups - GOIBIBO");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/GOIBIBO.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "MYNTRA") {
+            			contentModalTitle.html("Startups - MYNTRA");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/MYNTRA.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "QUORA") {
+            			contentModalTitle.html("Startups - QUORA");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/QUORA.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "SPACEX") {
+            			contentModalTitle.html("Startups - SPACE X");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/SPACEX.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "TESLA") {
+            			contentModalTitle.html("Startups - TESLA MOTORS");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/TESLA.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else if($(this).attr('data-item') == "ZOMATO") {
+            			contentModalTitle.html("Startups - ZOMATO");
+            			contentModalBody.html("<img class='modalImg' src='content/startups/ZOMATO.jpg' alt='1' />" + "<br />");
+            			contentModal.modal('show');
+            		}
+            		else {
+            			popup.children('p').remove();
+	            		popup.append("<p>Oops! We encountered an error during this operation. Please try again.</p>").fadeIn();	
+            		}
+
             	}
             	else {
             		popup.children('p').remove();
@@ -477,9 +559,20 @@
 
 		<div class="row divsMain" id="macroeconomicDiv">
 
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="india">
+				<a class="thumbnail macro">
+					<img src="img/macroeconomic/india.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							India
+						</h3>
+					</div>
+				</a>
+			</div>
+
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="australia">
 				<a class="thumbnail macro">
-					<img src="img/macroeconomic/.jpg" class="thumbnailImage" />
+					<img src="img/macroeconomic/australia.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							Australia
@@ -490,7 +583,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="germany" >
 				<a class="thumbnail macro">
-					<img src="img/macroeconomic/.jpg" class="thumbnailImage" />
+					<img src="img/macroeconomic/germany.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							Germany
@@ -501,7 +594,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="china">
 				<a class="thumbnail macro">
-					<img src="img/macroeconomic/.jpg" class="thumbnailImage" />
+					<img src="img/macroeconomic/china.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							China
@@ -512,7 +605,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="singapore">
 				<a class="thumbnail macro">
-					<img src="img/macroeconomic/.jpg" class="thumbnailImage" />
+					<img src="img/macroeconomic/singapore.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							Singapore
@@ -523,7 +616,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="usa">
 				<a class="thumbnail macro">
-					<img src="img/macroeconomic/.jpg" class="thumbnailImage" />
+					<img src="img/macroeconomic/usa.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							USA
@@ -534,7 +627,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="crudeOil">
 				<a class="thumbnail macro">
-					<img src="img/macroeconomic/.jpg" class="thumbnailImage" />
+					<img src="img/macroeconomic/crude.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							Crude Oil
@@ -545,7 +638,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="gold">
 				<a class="thumbnail macro">
-					<img src="img/macroeconomic/.jpg" class="thumbnailImage" />
+					<img src="img/macroeconomic/gold.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							Gold
@@ -559,7 +652,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="MA">
 				<a class="thumbnail financial">
-					<img src="img/financial/.jpg" class="thumbnailImage" />
+					<img src="img/financial/1.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							Mergers & Acquisitions
@@ -570,7 +663,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="PE">
 				<a class="thumbnail financial">
-					<img src="img/financial/.jpg" class="thumbnailImage" />
+					<img src="img/financial/2.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							Private Equity Deals
@@ -581,7 +674,7 @@
 
 			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="VC">
 				<a class="thumbnail financial">
-					<img src="img/financial/.jpg" class="thumbnailImage" />
+					<img src="img/financial/3.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
 							Venture Capitals
@@ -594,23 +687,23 @@
 
 		<div class="row divsMain" id="sectorDiv"> 
 
-			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="">
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="food">
 				<a class="thumbnail sector">
-					<img src="img/sector/.jpg" class="thumbnailImage" />
+					<img src="img/sector/1.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
-							
+							Food Startups
 						</h3>
 					</div>
 				</a>
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="">
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="health">
 				<a class="thumbnail sector">
-					<img src="img/sector/.jpg" class="thumbnailImage" />
+					<img src="img/sector/2.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
-							
+							Health Startups
 						</h3>
 					</div>
 				</a>
@@ -620,23 +713,111 @@
 
 		<div class="row divsMain" id="startupDiv"> 
 
-			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="">
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="9GAG">
 				<a class="thumbnail startup">
-					<img src="img/startups/.jpg" class="thumbnailImage" />
+					<img src="img/startups/9gag.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
-							
+							9GAG
 						</h3>
 					</div>
 				</a>
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="">
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="BOOKMYSHOW">
 				<a class="thumbnail startup">
-					<img src="img/startups/.jpg" class="thumbnailImage" />
+					<img src="img/startups/bookmyshow.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
-							
+							BOOK MY SHOW
+						</h3>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="EVENTBRITE">
+				<a class="thumbnail startup">
+					<img src="img/startups/eventbrite.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							EVENT BRITE
+						</h3>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="FRESHDESK">
+				<a class="thumbnail startup">
+					<img src="img/startups/freshdesk.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							FRESH DESK
+						</h3>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="GOIBIBO">
+				<a class="thumbnail startup">
+					<img src="img/startups/goibibo.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							GOIBIBO
+						</h3>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="MYNTRA">
+				<a class="thumbnail startup">
+					<img src="img/startups/myntra.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							MYNTRA
+						</h3>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="QUORA">
+				<a class="thumbnail startup">
+					<img src="img/startups/quora.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							QUORA
+						</h3>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="SPACEX">
+				<a class="thumbnail startup">
+					<img src="img/startups/spaceX.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							SPACE X
+						</h3>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="TESLA">
+				<a class="thumbnail startup">
+					<img src="img/startups/tesla.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							TESLA MOTORS
+						</h3>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-6 thumbPanel" data-item="ZOMATO">
+				<a class="thumbnail startup">
+					<img src="img/startups/zomato.jpg" class="thumbnailImage" />
+					<div class="caption">
+						<h3>
+							ZOMATO
 						</h3>
 					</div>
 				</a>

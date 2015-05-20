@@ -19,7 +19,7 @@ function SendRequestInviteMail($to, $toName) {
 		// write the mail body here.
 		$mailBody .= "<h1>MR - Compendium Invitation</h1><br />";
 		$mailBody .= "Dear " . $toName . "<br />";
-		$mailBody .= "Your Invite Code for MR - Compendium Access is: <b>testCoupon</b>. Please go ahead and use this code on <code>http://mentored-research.com/Compendium</code> to activate your Compendium Account.<br />";
+		$mailBody .= "Your Invite Code for MR - Compendium Access is: <b>Coupon001</b>. Please go ahead and use this code on <code>http://mentored-research.com/Compendium</code> to activate your Compendium Account.<br />";
 
 		$mailBody .= "<br /><br />Thank You.";
 		$mailBody .= "<br />MR - Compendium";

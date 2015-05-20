@@ -145,6 +145,13 @@
 	    	if(qs["login"] == "1") {   // show the login modal.
 	    		$('#loginModal').modal('show');
 	    	}
+	    	else if(qs["pay"] == "1") {   // show the Signup modal along with the instructions.
+
+	    		popup.children('p').remove();
+	    		popup.append("<p>Thank You for buying MR - Compendium. Please Signup with the appropriate option and use the coupon code <code>Coupon001</code> to gain access to MR - Compendium. Thank You.</p>").fadeIn();
+
+	    		$('#signupModal').modal('show');		
+	    	}
 	    	else {   // do nothing here.
 
 	    	}
@@ -739,6 +746,12 @@
 				$('#loginModal').modal('show');
 				return false;
 			})
+
+			//for the buy compendium button
+			$('#btnBuyCompendium').on('click', function() {
+				window.location.href = "http://mentored-research.com/payment/payment.php?amount=349";
+				return false;
+			});
 
         });    // end of ready function.
 
@@ -1590,8 +1603,8 @@
     <header>
         <div class="container">
             <div class="intro-text">
-                <!-- <div class="intro-lead-in">MR - Compendium</div> -->
-                <div class="intro-heading" style="font-family: writingText;">Your resources, all in one place</div>
+                <div class="intro-lead-in" style="font-family: writingText;">In this world where knowledge is power, it is important to be aware of the recent developments around you, be it news on the macroeconomic trends or the latest financial deals. With a crisp summary of the important developments in the past quarter, The Compendium is the go-to resource to move one step closer to success.</div>
+                <!-- <div class="intro-heading" style="font-family: writingText;">Your resources, all in one place</div> -->
                 <button id="btnGetStarted" class="btn btn-lg btn-primary">
 	            	Get Started
 	            </button>
@@ -1865,7 +1878,7 @@
 	                        Sign up MR-Compendium
 	                    </h3>
 
-	                    <input type="text" class="form-control" id="txtCode" placeholder="Enter Invite Code" />
+	                    <input type="hidden" class="form-control" id="txtCode" placeholder="Enter Invite Code" />
 
 	                    <button id="btnFbSignup" class="btn btn-lg btn-block btn-social btn-facebook" style="margin: 8% 0% 2% 0%;" onclick="checkSignupState();">
 	                        <i class="fa fa-facebook"></i>
