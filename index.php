@@ -147,8 +147,13 @@
 	    	}
 	    	else if(qs["fb"] == "1") {   // Login modal with instructions for fb login
 	    		popup.children('p').remove();
-	    		popup.append("<p>Hope you have logged in your Facebook Account. Please go ahead and Login/Signup using the button in the below box.</p>").fadeIn();
+	    		popup.append("<p>Hope you have logged in your Facebook Account. Please go ahead and Login using the button in the below box.</p>").fadeIn();
 	    		$('#loginModal').modal('show')
+	    	}
+	    	else if(qs["fb"] == "2") {   // Signup modal with instructions for fb login
+	    		popup.children('p').remove();
+	    		popup.append("<p>Hope you have logged in your Facebook Account. Please go ahead and Signup using the button in the below box.</p>").fadeIn();
+	    		$('#signupModal').modal('show')
 	    	}
 	    	else if(qs["pay"] == "1") {   // show the Signup modal along with the instructions.
 	    		popup.children('p').remove();
@@ -1041,10 +1046,10 @@
           		// open the facebook login window
           		window.open("http://facebook.com", "Login into your Facebook Account");
 
-          		// refresh the page with appropriate message after 5 seconds.
+          		// refresh the page with appropriate message after 8 seconds.
           		setTimeout(function() {
           			window.location.href = "http://mentored-research.com/Compendium?fb=1";
-          		}, 10000);
+          		}, 8000);
             }
     	}
 
@@ -1070,10 +1075,10 @@
           		// open the facebook login window
           		window.open("http://facebook.com", "Login into your Facebook Account");
 
-          		// refresh the page with appropriate message after 5 seconds.
+          		// refresh the page with appropriate message after 8 seconds.
           		setTimeout(function() {
-          			window.location.href = "http://mentored-research.com/Compendium?fb=1";
-          		}, 10000);
+          			window.location.href = "http://mentored-research.com/Compendium?fb=2";
+          		}, 8000);
             }
     	}
 
