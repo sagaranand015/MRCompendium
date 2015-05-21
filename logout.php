@@ -136,7 +136,7 @@
 
             // for the login button.
             $('#login').on('click', function() {
-                window.location.href = "http://mentored-research.com/Compendium?login=1";
+                window.location.href = "http://compendium.mentored-research.com?login=1";
                 return false;
             });
 
