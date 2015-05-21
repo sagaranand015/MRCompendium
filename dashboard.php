@@ -183,7 +183,7 @@
         }
 
         .modal {
-        	position: fixed;
+        	/*position: fixed;*/
         	overflow: auto;
         }
 
@@ -293,7 +293,7 @@
             		}
             		else if($(this).attr('data-item') == "china") {   // for the chine macroEconomic news.
             			contentModalTitle.html("MacroEconomic News - China");
-            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/china/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/macroeconomic/china/1.jpg' alt='1' />" + "<br /><br /><br />");
             			contentModalBody.append("<img class='modalImg' src='content/macroeconomic/china/2.jpg' alt='2' />"  + "<br />");
             			contentModal.modal('show');
             		}
@@ -361,7 +361,7 @@
             		}
             		else if($(this).attr('data-item') == "VC") {   // for the Private Equity financial Deals
             			contentModalTitle.html("Financial Deals - Venture Capital Deals");
-            			contentModalBody.html("<img class='modalImg' src='content/financial/vc/1.jpg' alt='1' />" + "<br />");
+            			contentModalBody.html("<img class='modalImg' src='content/financial/vc/1.jpeg' alt='1' />" + "<br />");
             			contentModalBody.append("<img class='modalImg' src='content/financial/vc/2.jpg' alt='2' />" + "<br />");
             			contentModalBody.append("<img class='modalImg' src='content/financial/vc/3.jpg' alt='3' />" + "<br />");
             			contentModalBody.append("<img class='modalImg' src='content/financial/vc/4.jpg' alt='4' />" + "<br />");
@@ -385,7 +385,7 @@
             		else if($(this).attr('data-item') == "health") {
             			contentModalTitle.html("Sector Bites - Health Startups");
             			contentModalBody.html("<img class='modalImg' src='content/sector/health/1.jpg' alt='1' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/sector/health/2.jpg' alt='2' />" + "<br />");
+            			contentModalBody.append("<img class='modalImg' src='content/sector/health/2.jpeg' alt='2' />" + "<br />");
             			contentModalBody.append("<img class='modalImg' src='content/sector/health/3.jpg' alt='3' />" + "<br />");
             			contentModal.modal('show');
             		}
