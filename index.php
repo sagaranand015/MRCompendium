@@ -75,6 +75,7 @@
         }
 
         #alertMsg {
+        	width: 60%;
             z-index:999999; 
             margin: 2% 2% 2% 2%;
             font-family: boldText;
@@ -82,6 +83,7 @@
         }
 
         #popup {
+        	width: 60%;
             z-index:999999; 
             margin: 2% 2% 2% 2%;    
             font-family: boldText;
