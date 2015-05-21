@@ -344,7 +344,7 @@
             			contentModalTitle.html("Financial Deals - Mergers and Acquisitions");
             			contentModalBody.html("<img class='modalImg' src='content/financial/ma/1.jpg' alt='1' />" + "<br />");
             			contentModalBody.append("<img class='modalImg' src='content/financial/ma/2.jpg' alt='2' />" + "<br />");
-            			contentModalBody.append("<img class='modalImg' src='content/financial/ma/3.jpg' alt='3' />" + "<br />");
+            			// contentModalBody.append("<img class='modalImg' src='content/financial/ma/3.jpg' alt='3' />" + "<br />");
             			contentModalBody.append("<img class='modalImg' src='content/financial/ma/4.jpg' alt='4' />" + "<br />");
             			contentModalBody.append("<img class='modalImg' src='content/financial/ma/5.jpg' alt='5' />" + "<br />");
             			contentModalBody.append("<img class='modalImg' src='content/financial/ma/6.jpg' alt='6' />" + "<br />");
@@ -600,7 +600,7 @@
 					<img src="img/macroeconomic/china.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
-							China
+							People's Republic of China
 						</h3>
 					</div>
 				</a>
@@ -622,7 +622,7 @@
 					<img src="img/macroeconomic/usa.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
-							USA
+							United States of America
 						</h3>
 					</div>
 				</a>
@@ -680,7 +680,7 @@
 					<img src="img/financial/3.jpg" class="thumbnailImage" />
 					<div class="caption">
 						<h3>
-							Venture Capitals
+							Venture Capital Deals
 						</h3>
 					</div>
 				</a>

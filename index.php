@@ -145,11 +145,14 @@
 	    	if(qs["login"] == "1") {   // show the login modal.
 	    		$('#loginModal').modal('show');
 	    	}
+	    	else if(qs["fb"] == "1") {   // Login modal with instructions for fb login
+	    		popup.children('p').remove();
+	    		popup.append("<p>Hope you have logged in your Facebook Account. Please go ahead and Login/Signup using the button in the below box.</p>").fadeIn();
+	    		$('#loginModal').modal('show')
+	    	}
 	    	else if(qs["pay"] == "1") {   // show the Signup modal along with the instructions.
-
 	    		popup.children('p').remove();
 	    		popup.append("<p>Thank You for buying MR - Compendium. Please Signup with the appropriate option and use the coupon code <code>Coupon001</code> to gain access to MR - Compendium. Thank You.</p>").fadeIn();
-
 	    		$('#signupModal').modal('show');		
 	    	}
 	    	else {   // do nothing here.
@@ -1018,12 +1021,6 @@
             });
         }
 
-        // for clicking on the facebook login button.
-        $('#btnFbLogin').on('click', function() {
-        	console.log("Logging in using Facebook.");
-        	checkLoginState();
-        });
-
         // callback thing for logging into Compendium using Facebook.
         function statusChangeCallback(response) {
             if (response.status === 'connected') {
@@ -1037,11 +1034,17 @@
               $('#popup').append("<p>Please login into the MR - Compendium app to continue.</p>").fadeIn('fast');
             } 
             else {
-                //alert("Please login into facebook and the app too!!");
                 console.log("Not logged into fb.");
-               //  $('#popup').children('p').remove();
-              	// $('#popup').append("<p>Please login into your facebook account to continue.</p>").fadeIn('fast');
-              	window.open("http://www.facebook.com", "_blank");
+          		$('#popup').children('p').remove();
+          		$('#popup').append("<p>Please login into your facebook account in another tab and then try again.</p>").fadeIn('fast');
+
+          		// open the facebook login window
+          		window.open("http://facebook.com", "Login into your Facebook Account");
+
+          		// refresh the page with appropriate message after 5 seconds.
+          		setTimeout(function() {
+          			window.location.href = "http://mentored-research.com/Compendium?fb=1";
+          		}, 10000);
             }
     	}
 
@@ -1062,8 +1065,15 @@
                 //alert("Please login into facebook and the app too!!");
                 console.log("Not logged into fb.");
             	$('#popup').children('p').remove();
-              	$('#popup').append("<p>Please login into your facebook account to continue.</p>").fadeIn('fast');
-              	window.open("http://www.facebook.com", "_blank");
+          		$('#popup').append("<p>Please login into your facebook account in another tab and then try again.</p>").fadeIn('fast');
+
+          		// open the facebook login window
+          		window.open("http://facebook.com", "Login into your Facebook Account");
+
+          		// refresh the page with appropriate message after 5 seconds.
+          		setTimeout(function() {
+          			window.location.href = "http://mentored-research.com/Compendium?fb=1";
+          		}, 10000);
             }
     	}
 
@@ -1806,7 +1816,7 @@
                         Social Media Login
                     </h3>
 
-                    <button id="btnFbLogin" class="btn btn-lg btn-block btn-social btn-facebook" style="margin: 8% 0% 2% 0%;" onclick="checkLoginState();">
+                    <button id="btnFbLogin" class="btn btn-lg btn-block btn-social btn-facebook" style="margin: 8% 0% 2% 0%;" onclick="checkLoginState();">    <!-- onclick="checkLoginState();" -->
                         <i class="fa fa-facebook"></i>
                         Facebook Login
                     </button> 
