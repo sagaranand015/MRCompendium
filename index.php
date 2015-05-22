@@ -2020,6 +2020,9 @@
                 					<span class="requestSalutation"></span> It appears to us that this email address of yours has not been invited to access Compendium yet. Please request an invite for trying this free service.
                 				</p>
                 				<p style="text-align: justify;">
+                					Alternatively, if you already have the coupon code, Click on the button below for Activation of your MR - Compendium Account.
+                				</p>
+                				<p style="text-align: justify;">
                 					In case of any other problems, please feel free to drop in a mail at <code>tech@mentored-research.com</code> and we'd get back to you in 48 hours. 
                 				</p>
                 				<p style="text-align: justify;">
@@ -2030,7 +2033,7 @@
                 		<tr>
                 			<td>
                 				<button class="btn btn-lg btn-block btn-primary" id="btnRequestInvite">
-                					Request Invite
+                					Request Invite/ Activate
                 				</button>
                 			</td>
                 		</tr>
