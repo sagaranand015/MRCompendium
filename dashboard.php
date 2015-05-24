@@ -6,7 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="Mentored-Research Compendium" content="Compendium by Mentored-Research, Mentored-Research">
+    <!--<meta property="og:image" content="http://mentored-research.com/Compendium/img/Fbthumb.png"> -->
+    <meta property="og:description" content="Compendium by Mentored-Research. In this world where knowledge is power, it is important to be aware of the recent developments around you, be it news on the macroeconomic trends or the latest financial deals. With a crisp summary of the important developments in the past quarter, The Compendium is the go-to resource to move one step closer to success.">
+    <meta property="og:title" content="The Compendium by Mentored-Research">
+
+    <meta name="description" content="Compendium by Mentored-Research, Mentored-Research. In this world where knowledge is power, it is important to be aware of the recent developments around you, be it news on the macroeconomic trends or the latest financial deals. With a crisp summary of the important developments in the past quarter, The Compendium is the go-to resource to move one step closer to success.">
+    <meta name="keywords" content="In this world where knowledge is power, it is important to be aware of the recent developments around you, be it news on the macroeconomic trends or the latest financial deals. With a crisp summary of the important developments in the past quarter, The Compendium is the go-to resource to move one step closer to success.">
     <meta name="author" content="Sagar anand, Mentored-Research Tech Team, MR Compendium">
 
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
