@@ -186,6 +186,7 @@ function CheckUserSignup($name, $email) {
 // this is the function to send the contact message from the user.
 function SendMessage($name, $email, $phone, $message) {
 	$response = "-1";
+	$adminMail = "-1";
 	try {
 		$date = date("Y-m-d H:i:s");
 		$query = "insert into ContactUs(Name, Email, Phone, Message, UpdatedOn) values('$name', '$email', '$phone', '$message', '$date')";
@@ -195,6 +196,7 @@ function SendMessage($name, $email, $phone, $message) {
 		}
 		else {
 			$response = "1";
+			$adminMail = CompendiumContactAdminMail("info@mentored-research.com", $name, $email, $phone, $message, $date);
 		}
 		echo $response;
 	}
