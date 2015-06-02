@@ -5,6 +5,48 @@
 //these are for the PHP Helper files
 include 'headers/databaseConn.php';
 
+// this is the function to send the mail to the Admin for CONTACT US.
+// returns 1 on success and -1 on Failure.
+function CompendiumContactAdminMail($to, $name, $email, $tel, $message, $date) {
+	$res = "-1";
+	$mailBody = "";
+	try{
+
+		$subject = "Compendium Contact Message Recieved";
+
+		$headers = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+		$headers .= "From: guide@mentored-research.com" . "\r\n";
+
+		// write the mail body here.
+		$mailBody .= "<h1>Compendium Contact Message Received</h1><br />";
+		$mailBody .= "Dear Admin, " . "<br />";
+		$mailBody .= "Following are the details of the message recieved from the contact us page on MR - Compendium: <br /><br />";
+
+		$mailBody .= "Name: <b>" . $name . "</b><br />";
+		$mailBody .= "Email Address: <b>" . $email . "</b><br />";
+		$mailBody .= "Phone Number: <b>" . $tel . "</b><br />";
+		$mailBody .= "College Name: <b>" . $message . "</b><br />";
+		$mailBody .= "Request on: <b>: " . $date . "</b><br />";
+
+		$mailBody .= "<br /><br />Thank You.";
+		$mailBody .= "<br />MR - Connect";
+		$mailBody .= "<br /><a href='http://mentored-research.com'>Mentored-Research</a>";
+
+		if(mail($to, $subject, $mailBody, $headers) == true) {
+			$res = "1";
+		}
+		else {
+			$res = "-1";	
+		}
+		return $res;
+	}	
+	catch(Exception $e) {
+		$res = "-1";
+		return $res;
+	}
+}
+
 //this is the function to send the mail to the user who requested the connection, as a confirmation.
 function SendRequestInviteMail($to, $toName) {
 	$res = "-1";

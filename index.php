@@ -454,10 +454,10 @@
             // for the send message button on the home page in contact us tab.
             $('#btnSendMessage').on('click', function() {
 
-                var name = $('#txtName').val();
-                var email = $('#txtContactEmail').val();
-                var phone = $('#txtContactPhone').val();
-                var message = $('#txtContactMessage').val();
+                var name = $('#txtName').val().trim();
+                var email = $('#txtContactEmail').val().trim();
+                var phone = $('#txtContactPhone').val().trim();
+                var message = $('#txtContactMessage').val().trim();
 
                 if(name == "" || email == "" || phone == "" || message == "")  {
                     popup.children('p').remove();
